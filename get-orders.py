@@ -56,7 +56,7 @@ orders = []
 while GO_TO_NEXT_PAGE:
     print(f"Extracting page: {str(PAGE_COUNT+1)}           ", end='\r')
     try:
-        data = extract_data(from_date='2024-05-01',
+        data = extract_data(from_date='2024-08-01',
                             limit=100,
                             after=NEXT_PAGE)['data']['orders']
         for order in data['data']['edges']:
