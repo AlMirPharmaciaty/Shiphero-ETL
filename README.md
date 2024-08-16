@@ -15,7 +15,7 @@ venv\scripts\activate
 pip install -r requirements
 ```
 
-3. Add authentication token in the token.txt file
+3. Add authentication token in the `token.txt` file
 
 4. Generate schema (optional) (already provided)
 
