@@ -20,7 +20,7 @@ pip install -r requirements
 py get-orders.py
 ```
 
-4. Process data
+4. Process data (currently the format of the processed data is for demonstration purposes only)
 ```
 py process.py
 ```
