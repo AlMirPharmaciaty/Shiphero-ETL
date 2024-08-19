@@ -15,16 +15,16 @@ venv\scripts\activate
 pip install -r requirements
 ```
 
-3. Add authentication token in the `token.txt` file
+3. Add authentication token in the `token.txt` file (located inside config directory)
 
 4. Generate schema (optional) (already provided)
 
-5. Extract data (configure data filters and selection manually from the file)
+5. Extract data (to json) (configure data filters and selection manually from the file)
 ```
-py get-orders.py
+py extract.py
 ```
 
-6. Process data (currently the format of the processed data is for demonstration purposes only)
+6. Transform data (json to csv) (currently the format of the processed data is for demonstration purposes only)
 ```
-py process.py
+py transform.py
 ```
