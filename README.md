@@ -19,9 +19,9 @@ pip install -r requirements
 
 4. Generate schema (optional) (already provided)
 
-5. Extract data (to json) (configure data filters and selection manually from the file)
+5. Extract data (to json) (configure data selection manually from the file)
 ```
-py extract.py
+py extract.py --date=2024-08-19
 ```
 
 6. Transform data (json to csv) (currently the format of the processed data is for demonstration purposes only)

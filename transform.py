@@ -53,8 +53,7 @@ avg_time = TOTAL_FULFILLMENT_DIFF/len(orders)
 days, remainder = divmod(avg_time, 86400)
 hours, remainder = divmod(remainder, 3600)
 minutes, _ = divmod(remainder, 60)
-print(f"""Average order fulfillment time:
-      {int(days)} days {int(hours)} hrs {int(minutes)} mins""")
+print(f"Average order fulfillment time: {int(days)} days {int(hours)} hrs {int(minutes)} mins")
 
 
 with open('data/orders.csv', 'w', encoding='utf-8', newline='') as file:

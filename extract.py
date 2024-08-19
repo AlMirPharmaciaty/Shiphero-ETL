@@ -1,11 +1,28 @@
 import json
 import time
+import argparse
 from sgqlc.operation import Operation
 from sgqlc.endpoint.http import HTTPEndpoint
 from config.schema import schema
 
+FILTER_FROM_DATE = "2024-08-01"
+FILTER_LIMIT = 100
+REQUEST_INTERVAL = 10
+
 start = time.time()
 print('Extracting orders...')
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--date", help="From date filter")
+parser.add_argument("--limit", help="Number of orders extracted per request")
+parser.add_argument("--interval", help="Seconds to wait before each request")
+args = parser.parse_args()
+if args.date:
+    FILTER_FROM_DATE = str(args.date)
+if args.limit:
+    FILTER_LIMIT = int(args.limit)
+if args.interval:
+    REQUEST_INTERVAL = int(args.interval)
 
 with open('config/token.txt', 'r', encoding='utf-8') as f:
     AUTH_TOKEN = f.read()
@@ -56,8 +73,8 @@ orders = []
 while GO_TO_NEXT_PAGE:
     print(f"Extracting page: {str(PAGE_COUNT+1)}           ", end='\r')
     try:
-        data = extract_data(from_date='2024-08-01',
-                            limit=100,
+        data = extract_data(from_date=FILTER_FROM_DATE,
+                            limit=FILTER_LIMIT,
                             after=NEXT_PAGE)['data']['orders']
         for order in data['data']['edges']:
             orders.append(order['node'])
@@ -67,15 +84,15 @@ while GO_TO_NEXT_PAGE:
         NEXT_PAGE = page_info['endCursor']
         PAGE_COUNT += 1
     except Exception as e:
-        print("Failed to extract data... retrying in 10s --- Error:", e)
+        print(
+            f"Failed to extract data | Retrying in {REQUEST_INTERVAL}s | Error: {str(e)}")
     if GO_TO_NEXT_PAGE:
         # ======================================================
-        # Replace the below for loop with time.sleep(10) in prod
+        # Replace the below for loop with time.sleep(REQUEST_INTERVAL) in prod
         # and remove end param and whitespaces from print funcs
         # ======================================================
-        wait = 10
-        for i in range(wait):
-            count = f"{'0' if (wait-i)<wait else ''}{wait - i}"
+        for i in range(REQUEST_INTERVAL):
+            count = f"{'0' if (REQUEST_INTERVAL-i)<REQUEST_INTERVAL else ''}{REQUEST_INTERVAL - i}"
             print(f"Page {PAGE_COUNT} extracted. Waiting {count}s", end='\r')
             time.sleep(1)
 
