@@ -7,7 +7,7 @@ start = time.time()
 print('Transforming orders...')
 
 
-with open("orders.json", "r", encoding="utf-8") as file:
+with open("data/orders.json", "r", encoding="utf-8") as file:
     orders = json.load(file)
 
 
@@ -57,7 +57,7 @@ print(f"""Average order fulfillment time:
       {int(days)} days {int(hours)} hrs {int(minutes)} mins""")
 
 
-with open('orders.csv', 'w', encoding='utf-8', newline='') as file:
+with open('data/orders.csv', 'w', encoding='utf-8', newline='') as file:
     csv_writer = csv.DictWriter(file,
                                 fieldnames=list(orders_transformed[0].keys()))
     csv_writer.writeheader()

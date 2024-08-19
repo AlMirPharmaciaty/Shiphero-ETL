@@ -2,12 +2,12 @@ import json
 import time
 from sgqlc.operation import Operation
 from sgqlc.endpoint.http import HTTPEndpoint
-from schema import schema
+from config.schema import schema
 
 start = time.time()
 print('Extracting orders...')
 
-with open('token.txt', 'r', encoding='utf-8') as f:
+with open('config/token.txt', 'r', encoding='utf-8') as f:
     AUTH_TOKEN = f.read()
 
 graphql = HTTPEndpoint('https://public-api.shiphero.com/graphql',
@@ -82,7 +82,7 @@ while GO_TO_NEXT_PAGE:
 print(f'Orders count: {len(orders)}     ')
 print(f'Total complexity: {TOTAL_COMPLEXITY} ({PAGE_COUNT} requests)')
 
-with open("orders.json", "w", encoding="utf-8") as file:
+with open("data/orders.json", "w", encoding="utf-8") as file:
     json.dump(orders, file)
 
 print(f'Extraction completed --- time taken: {(time.time()-start)} sec')
