@@ -70,6 +70,7 @@ GO_TO_NEXT_PAGE = True
 PAGE_COUNT = 0
 NEXT_PAGE = ''
 TOTAL_COMPLEXITY = 0
+FAILS = 0
 orders = []
 
 while GO_TO_NEXT_PAGE:
@@ -88,6 +89,9 @@ while GO_TO_NEXT_PAGE:
         NEXT_PAGE = page_info['endCursor']
         PAGE_COUNT += 1
     except Exception as e:
+        FAILS += 1
+        if REQUEST_INTERVAL > 30:
+            REQUEST_INTERVAL += 5
         print(
             f"Failed to extract data | Retrying in {REQUEST_INTERVAL}s | Error: {str(e)}")
     if GO_TO_NEXT_PAGE:
@@ -101,7 +105,7 @@ while GO_TO_NEXT_PAGE:
             time.sleep(1)
 
 print(f'Orders count: {len(orders)}     ')
-print(f'Total complexity: {TOTAL_COMPLEXITY} ({PAGE_COUNT} requests)')
+print(f'Total complexity: {TOTAL_COMPLEXITY} ({PAGE_COUNT} requests/{FAILS} fails)')
 
 with open("data/orders.json", "w", encoding="utf-8") as file:
     json.dump(orders, file)

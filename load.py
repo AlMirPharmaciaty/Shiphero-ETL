@@ -17,10 +17,13 @@ ADDED_COUNT = FAILED_COUNT = EXISTS_COUNT = 0
 if orders:
     init_db()
     db: Session = session()
+    new_orders = []
     for order in orders:
         try:
+            # Check if order already exists in db
             if db.query(Order).filter(Order.id == order['id']).first():
                 EXISTS_COUNT += 1
+            # If not, create new order entry
             else:
                 new_order = Order(**order)
                 new_order.created_at = from_iso(new_order.created_at)
@@ -37,7 +40,7 @@ if orders:
                 new_order.extracted_at = from_iso(new_order.extracted_at)
                 new_order.transformed_at = from_iso(new_order.transformed_at)
                 db.add(new_order)
-                db.commit()
+                db.flush()
                 ADDED_COUNT += 1
         except Exception as e:
             db.rollback()
@@ -45,6 +48,12 @@ if orders:
             print('Failed to add to database:', str(e))
         print(f'Total: {len(orders)} | Added: {ADDED_COUNT} | Failed: {FAILED_COUNT} | Already Exists: {EXISTS_COUNT}',
               end='\r')
+
+    if ADDED_COUNT > 0:
+        try:
+            db.commit()
+        except Exception as e:
+            print('Failed to commit to db:', e)
 
 print(f'Total: {len(orders)} | Added: {ADDED_COUNT} | Failed: {FAILED_COUNT} | Already Exists: {EXISTS_COUNT}')
 print(f'Orders loaded to database --- time taken: {(time.time()-start)} sec')
