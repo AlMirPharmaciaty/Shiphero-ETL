@@ -3,7 +3,10 @@ import time
 import argparse
 from sgqlc.operation import Operation
 from sgqlc.endpoint.http import HTTPEndpoint
+
+from config.settings import AUTH_TOKEN
 from config.schema import schema
+from utils.datetime_parser import to_iso
 
 FILTER_FROM_DATE = "2024-08-01"
 FILTER_LIMIT = 100
@@ -11,6 +14,7 @@ REQUEST_INTERVAL = 10
 
 start = time.time()
 print('Extracting orders...')
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--date", help="From date filter")
@@ -24,14 +28,12 @@ if args.limit:
 if args.interval:
     REQUEST_INTERVAL = int(args.interval)
 
-with open('config/token.txt', 'r', encoding='utf-8') as f:
-    AUTH_TOKEN = f.read()
 
 graphql = HTTPEndpoint('https://public-api.shiphero.com/graphql',
                        base_headers={'Authorization': f'Bearer {AUTH_TOKEN}'})
 
 
-def extract_data(from_date, limit=10, after=''):
+def extract_orders(from_date, limit=10, after=''):
     """
     GraphQL Data Extractor
     """
@@ -73,11 +75,13 @@ orders = []
 while GO_TO_NEXT_PAGE:
     print(f"Extracting page: {str(PAGE_COUNT+1)}           ", end='\r')
     try:
-        data = extract_data(from_date=FILTER_FROM_DATE,
-                            limit=FILTER_LIMIT,
-                            after=NEXT_PAGE)['data']['orders']
+        data = extract_orders(from_date=FILTER_FROM_DATE,
+                              limit=FILTER_LIMIT,
+                              after=NEXT_PAGE)['data']['orders']
         for order in data['data']['edges']:
-            orders.append(order['node'])
+            order = order['node']
+            order['extracted_at'] = to_iso()
+            orders.append(order)
         TOTAL_COMPLEXITY += data['complexity']
         page_info = data['data']['pageInfo']
         GO_TO_NEXT_PAGE = page_info['hasNextPage']

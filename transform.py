@@ -1,7 +1,8 @@
 import time
 import json
-from datetime import datetime
 import csv
+
+from utils.datetime_parser import to_iso, from_iso
 
 start = time.time()
 print('Transforming orders...')
@@ -23,25 +24,27 @@ for order in orders:
     data['source'] = order['source']
     data['shop_name'] = order['shop_name']
     data['total_price'] = order['total_price']
-    data['created_at'] = ''
-    data['shipped_at'] = ''
-    data['created_by'] = ''
-    data['shipped_by'] = ''
-    data['fulfillment_time'] = ''
-    data['fulfillment_time_secs'] = ''
+    data['created_at'] = None
+    data['shipped_at'] = None
+    data['created_by'] = None
+    data['shipped_by'] = None
+    data['fulfillment_time'] = None
+    data['fulfillment_time_secs'] = None
+    data['extracted_at'] = order['extracted_at']
+    data['transformed_at'] = to_iso()
 
     # Get order creation and shipping details from history
     for history in order['order_history']:
         if "created" in history['information'].lower():
-            data['created_at'] = datetime.fromisoformat(history['created_at'])
+            data['created_at'] = history['created_at']
             data['created_by'] = history['username']
         if 'shipped' in history['information'].lower():
-            data['shipped_at'] = datetime.fromisoformat(history['created_at'])
+            data['shipped_at'] = history['created_at']
             data['shipped_by'] = history['username']
 
     # calculate time taken to fulfil the order
     if data['created_at'] and data['shipped_at']:
-        diff = data['shipped_at'] - data['created_at']
+        diff = from_iso(data['shipped_at']) - from_iso(data['created_at'])
         data['fulfillment_time_secs'] = diff.total_seconds()
         TOTAL_FULFILLMENT_DIFF += diff.total_seconds()
         diff = f"{diff.days} days {diff.seconds // 3600} hrs {(diff.seconds % 3600) // 60} mins"
@@ -53,7 +56,8 @@ avg_time = TOTAL_FULFILLMENT_DIFF/len(orders)
 days, remainder = divmod(avg_time, 86400)
 hours, remainder = divmod(remainder, 3600)
 minutes, _ = divmod(remainder, 60)
-print(f"Average order fulfillment time: {int(days)} days {int(hours)} hrs {int(minutes)} mins")
+print(
+    f"Average order fulfillment time: {int(days)} days {int(hours)} hrs {int(minutes)} mins")
 
 
 with open('data/orders.csv', 'w', encoding='utf-8', newline='') as file:
