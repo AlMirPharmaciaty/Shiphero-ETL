@@ -2,7 +2,7 @@
 
  ### How to run the app locally?
 
-1. Setup virtual environment (optional)
+1. Setup virtual environment
 ```
 py -m venv venv
 ```
