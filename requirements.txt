@@ -1,3 +1,4 @@
 sgqlc
 python-dotenv
 sqlalchemy
+pymysql

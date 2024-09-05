@@ -1,7 +1,6 @@
 import subprocess
 
-with open('config/token.txt', 'r', encoding='utf-8') as f:
-    AUTH_TOKEN = f.read()
+from config.settings import AUTH_TOKEN
 
 
 if __name__ == "__main__":
@@ -11,10 +10,10 @@ if __name__ == "__main__":
         "--exclude-description",
         "-H", f"Authorization: Bearer {AUTH_TOKEN}",
         "https://public-api.shiphero.com/graphql",
-        "config/schema.json"
+        "config/shiphero_schema.json"
     ]
     command_two = ["sgqlc-codegen", "schema",
-                   "config/schema.json", "config/schema.py"]
+                   "config/shiphero_schema.json", "config/shiphero_schema.py"]
     try:
         subprocess.run(command, check=True)
         subprocess.run(command_two, check=True)

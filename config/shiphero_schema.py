@@ -3,12 +3,12 @@ import sgqlc.types.datetime
 import sgqlc.types.relay
 
 
-schema = sgqlc.types.Schema()
+shiphero_schema = sgqlc.types.Schema()
 
 
 # Unexport Node/PageInfo, let schema re-declare them
-schema -= sgqlc.types.relay.Node
-schema -= sgqlc.types.relay.PageInfo
+shiphero_schema -= sgqlc.types.relay.Node
+shiphero_schema -= sgqlc.types.relay.PageInfo
 
 
 
@@ -22,34 +22,34 @@ Date = sgqlc.types.datetime.Date
 DateTime = sgqlc.types.datetime.DateTime
 
 class Decimal(sgqlc.types.Scalar):
-    __schema__ = schema
+    __schema__ = shiphero_schema
 
 
 class EntityType(sgqlc.types.Enum):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __choices__ = ('Account', 'Bin', 'LineItem', 'LocationType', 'Order', 'Product', 'PurchaseOrder', 'PurchaseOrderLineItem', 'Return', 'ReturnItem', 'Shipment', 'ShippedLineItem', 'Tote', 'User', 'Vendor', 'Warehouse', 'WarehouseProduct')
 
 
 Float = sgqlc.types.Float
 
 class GenericScalar(sgqlc.types.Scalar):
-    __schema__ = schema
+    __schema__ = shiphero_schema
 
 
 ID = sgqlc.types.ID
 
 class ISODateTime(sgqlc.types.Scalar):
-    __schema__ = schema
+    __schema__ = shiphero_schema
 
 
 Int = sgqlc.types.Int
 
 class Money(sgqlc.types.Scalar):
-    __schema__ = schema
+    __schema__ = shiphero_schema
 
 
 class ReturnLabelType(sgqlc.types.Enum):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __choices__ = ('FLAT_RATE', 'FREE', 'PAID', 'RETURN_TO_SENDER', 'SELF_RETURN')
 
 
@@ -60,14 +60,14 @@ String = sgqlc.types.String
 # Input Objects
 ########################################################################
 class AbortInventorySyncInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sync_id', 'reason')
     sync_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sync_id')
     reason = sgqlc.types.Field(String, graphql_name='reason')
 
 
 class AddHistoryInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'history_entry')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -75,7 +75,7 @@ class AddHistoryInput(sgqlc.types.Input):
 
 
 class AddLineItemsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'line_items')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -83,7 +83,7 @@ class AddLineItemsInput(sgqlc.types.Input):
 
 
 class AddProductToVendorInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'vendor_id', 'sku', 'manufacturer_sku', 'price')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     vendor_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='vendor_id')
@@ -93,8 +93,8 @@ class AddProductToVendorInput(sgqlc.types.Input):
 
 
 class AddProductToWarehouseInput(sgqlc.types.Input):
-    __schema__ = schema
-    __field_names__ = ('customer_account_id', 'sku', 'warehouse_id', 'on_hand', 'inventory_bin', 'inventory_overstock_bin', 'reserve_inventory', 'replenishment_level', 'reorder_level', 'reorder_amount', 'price')
+    __schema__ = shiphero_schema
+    __field_names__ = ('customer_account_id', 'sku', 'warehouse_id', 'on_hand', 'inventory_bin', 'inventory_overstock_bin', 'reserve_inventory', 'replenishment_level', 'reorder_level', 'reorder_amount', 'price', 'value', 'value_currency', 'active')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     warehouse_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='warehouse_id')
@@ -106,10 +106,13 @@ class AddProductToWarehouseInput(sgqlc.types.Input):
     reorder_level = sgqlc.types.Field(Int, graphql_name='reorder_level')
     reorder_amount = sgqlc.types.Field(Int, graphql_name='reorder_amount')
     price = sgqlc.types.Field(String, graphql_name='price')
+    value = sgqlc.types.Field(String, graphql_name='value')
+    value_currency = sgqlc.types.Field(String, graphql_name='value_currency')
+    active = sgqlc.types.Field(Boolean, graphql_name='active')
 
 
 class AddPurchaseOrderAttachmentInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('po_id', 'url', 'description', 'filename', 'file_type')
     po_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='po_id')
     url = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='url')
@@ -119,7 +122,7 @@ class AddPurchaseOrderAttachmentInput(sgqlc.types.Input):
 
 
 class AddressInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('name', 'address1', 'address2', 'city', 'state', 'country', 'zip', 'phone')
     name = sgqlc.types.Field(String, graphql_name='name')
     address1 = sgqlc.types.Field(String, graphql_name='address1')
@@ -132,21 +135,21 @@ class AddressInput(sgqlc.types.Input):
 
 
 class AssignLotToLocationInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('lot_id', 'location_id')
     lot_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='lot_id')
     location_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='location_id')
 
 
 class BuildKitComponentInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sku', 'quantity')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
 
 
 class BuildKitInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sku', 'components', 'kit_build', 'customer_account_id', 'warehouse_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     components = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of(BuildKitComponentInput)), graphql_name='components')
@@ -156,7 +159,7 @@ class BuildKitInput(sgqlc.types.Input):
 
 
 class CancelOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'reason', 'void_on_platform', 'force')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -166,14 +169,14 @@ class CancelOrderInput(sgqlc.types.Input):
 
 
 class CancelPurchaseOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'po_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     po_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='po_id')
 
 
 class ChangeOrderWarehouseInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'warehouse_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -181,21 +184,21 @@ class ChangeOrderWarehouseInput(sgqlc.types.Input):
 
 
 class ClearKitInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
 
 
 class ClosePurchaseOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'po_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     po_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='po_id')
 
 
 class CreateBillInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'start_date', 'end_date')
     customer_account_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='customer_account_id')
     start_date = sgqlc.types.Field(sgqlc.types.non_null(ISODateTime), graphql_name='start_date')
@@ -203,7 +206,7 @@ class CreateBillInput(sgqlc.types.Input):
 
 
 class CreateExchangeItem(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('return_item_id', 'exchange_product_sku', 'quantity')
     return_item_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='return_item_id')
     exchange_product_sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='exchange_product_sku')
@@ -211,7 +214,7 @@ class CreateExchangeItem(sgqlc.types.Input):
 
 
 class CreateLabelResourceInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('paper_pdf_location', 'thermal_pdf_location', 'pdf_location', 'image_location')
     paper_pdf_location = sgqlc.types.Field(String, graphql_name='paper_pdf_location')
     thermal_pdf_location = sgqlc.types.Field(String, graphql_name='thermal_pdf_location')
@@ -220,7 +223,7 @@ class CreateLabelResourceInput(sgqlc.types.Input):
 
 
 class CreateLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sku', 'partner_line_item_id', 'quantity', 'price', 'product_name', 'option_title', 'fulfillment_status', 'quantity_pending_fulfillment', 'custom_options', 'custom_barcode', 'eligible_for_return', 'customs_value', 'barcode', 'warehouse_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     partner_line_item_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='partner_line_item_id')
@@ -239,7 +242,7 @@ class CreateLineItemInput(sgqlc.types.Input):
 
 
 class CreateLocationInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('warehouse_id', 'name', 'zone', 'location_type_id', 'pickable', 'sellable', 'is_cart', 'pick_priority', 'dimensions', 'temperature')
     warehouse_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='warehouse_id')
     name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='name')
@@ -254,7 +257,7 @@ class CreateLocationInput(sgqlc.types.Input):
 
 
 class CreateLotInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'name', 'sku', 'expires_at', 'is_active')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='name')
@@ -264,7 +267,7 @@ class CreateLotInput(sgqlc.types.Input):
 
 
 class CreateOrderAddressInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('first_name', 'last_name', 'company', 'address1', 'address2', 'city', 'state', 'state_code', 'zip', 'country', 'country_code', 'email', 'phone')
     first_name = sgqlc.types.Field(String, graphql_name='first_name')
     last_name = sgqlc.types.Field(String, graphql_name='last_name')
@@ -282,7 +285,7 @@ class CreateOrderAddressInput(sgqlc.types.Input):
 
 
 class CreateOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_number', 'partner_order_id', 'shop_name', 'fulfillment_status', 'order_date', 'total_tax', 'subtotal', 'total_discounts', 'total_price', 'box_name', 'currency', 'ready_to_ship', 'insurance_amount', 'shipping_lines', 'shipping_address', 'billing_address', 'from_name', 'note_attributes', 'tags', 'line_items', 'gift_note', 'gift_invoice', 'require_signature', 'adult_signature_required', 'alcohol', 'insurance', 'allow_partial', 'allow_split', 'custom_invoice_url', 'email', 'profile', 'packing_note', 'required_ship_date', 'auto_print_return_label', 'hold_until_date', 'incoterms', 'tax_id', 'tax_type', 'flagged', 'saturday_delivery', 'ignore_address_validation_errors', 'skip_address_validation', 'priority_flag', 'allocation_priority', 'holds', 'dry_ice_weight_in_lbs', 'ftr_exemption', 'address_is_business')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_number = sgqlc.types.Field(String, graphql_name='order_number')
@@ -336,21 +339,21 @@ class CreateOrderInput(sgqlc.types.Input):
 
 
 class CreateProductCaseInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('case_barcode', 'case_quantity')
     case_barcode = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='case_barcode')
     case_quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='case_quantity')
 
 
 class CreateProductImageInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('src', 'position')
     src = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='src')
     position = sgqlc.types.Field(Int, graphql_name='position')
 
 
 class CreateProductInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'name', 'sku', 'price', 'value', 'warehouse_products', 'barcode', 'country_of_manufacture', 'dimensions', 'tariff_code', 'product_note', 'kit', 'kit_build', 'no_air', 'final_sale', 'customs_value', 'customs_description', 'not_owned', 'ignore_on_customs', 'ignore_on_invoice', 'dropship', 'needs_serial_number', 'virtual', 'needs_lot_tracking', 'images', 'tags', 'vendors', 'packer_note', 'cases')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='name')
@@ -384,7 +387,7 @@ class CreateProductInput(sgqlc.types.Input):
 
 
 class CreateProductVendorInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('vendor_id', 'vendor_sku', 'price')
     vendor_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='vendor_id')
     vendor_sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='vendor_sku')
@@ -392,7 +395,7 @@ class CreateProductVendorInput(sgqlc.types.Input):
 
 
 class CreatePurchaseOrderAttachmentInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('url', 'description', 'filename', 'file_type')
     url = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='url')
     description = sgqlc.types.Field(String, graphql_name='description')
@@ -401,7 +404,7 @@ class CreatePurchaseOrderAttachmentInput(sgqlc.types.Input):
 
 
 class CreatePurchaseOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'po_number', 'subtotal', 'shipping_price', 'total_price', 'warehouse_id', 'line_items', 'po_date', 'po_note', 'fulfillment_status', 'discount', 'vendor_id', 'warehouse', 'packing_note', 'description', 'partner_order_number', 'tax', 'tracking_number', 'attachments', 'origin_of_shipment')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     po_number = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='po_number')
@@ -426,7 +429,7 @@ class CreatePurchaseOrderInput(sgqlc.types.Input):
 
 
 class CreatePurchaseOrderLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sku', 'quantity', 'expected_weight_in_lbs', 'price', 'vendor_id', 'vendor_sku', 'variant_id', 'quantity_received', 'quantity_rejected', 'product_name', 'option_title', 'fulfillment_status', 'sell_ahead', 'note', 'partner_line_item_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
@@ -446,7 +449,7 @@ class CreatePurchaseOrderLineItemInput(sgqlc.types.Input):
 
 
 class CreateReturnExchangeInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'return_id', 'exchange_items')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     return_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='return_id')
@@ -454,7 +457,7 @@ class CreateReturnExchangeInput(sgqlc.types.Input):
 
 
 class CreateReturnInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'warehouse_id', 'return_reason', 'label_type', 'label_cost', 'address', 'dimensions', 'shipping_carrier', 'shipping_method', 'line_items', 'tracking_number', 'create_label', 'partner_id', 'display_issue_refund', 'return_pickup_datetime')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -475,14 +478,14 @@ class CreateReturnInput(sgqlc.types.Input):
 
 
 class CreateReturnItemExchangeInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('exchange_product_sku', 'quantity')
     exchange_product_sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='exchange_product_sku')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
 
 
 class CreateReturnLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sku', 'quantity', 'return_reason', 'condition', 'is_component', 'exchange_items')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
@@ -493,7 +496,7 @@ class CreateReturnLineItemInput(sgqlc.types.Input):
 
 
 class CreateShipmentInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'warehouse_id', 'address', 'line_items', 'labels', 'notify_customer_via_shiphero', 'notify_customer_via_store', 'shipped_off_shiphero', 'profile')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -508,14 +511,14 @@ class CreateShipmentInput(sgqlc.types.Input):
 
 
 class CreateShipmentLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('line_item_id', 'quantity')
     line_item_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='line_item_id')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
 
 
 class CreateShipmentShippingLabelInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('carrier', 'shipping_name', 'shipping_method', 'cost', 'address', 'dimensions', 'label', 'line_item_ids', 'tracking_number', 'tracking_url')
     carrier = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='carrier')
     shipping_name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='shipping_name')
@@ -530,7 +533,7 @@ class CreateShipmentShippingLabelInput(sgqlc.types.Input):
 
 
 class CreateShippingLabelInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'carrier', 'shipping_name', 'shipping_method', 'cost', 'address', 'dimensions', 'label', 'line_item_ids', 'tracking_number', 'shipment_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     carrier = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='carrier')
@@ -546,7 +549,7 @@ class CreateShippingLabelInput(sgqlc.types.Input):
 
 
 class CreateShippingLinesInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('title', 'price', 'carrier', 'method')
     title = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='title')
     price = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='price')
@@ -555,7 +558,7 @@ class CreateShippingLinesInput(sgqlc.types.Input):
 
 
 class CreateShippingPlanInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('subtotal', 'shipping_price', 'total_price', 'warehouse_id', 'warehouse_note', 'vendor_po_number', 'line_items', 'packages', 'pallet')
     subtotal = sgqlc.types.Field(String, graphql_name='subtotal')
     shipping_price = sgqlc.types.Field(String, graphql_name='shipping_price')
@@ -569,7 +572,7 @@ class CreateShippingPlanInput(sgqlc.types.Input):
 
 
 class CreateVendorInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'name', 'email', 'account_number', 'address', 'currency', 'internal_note', 'default_po_note', 'logo', 'partner_vendor_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='name')
@@ -584,7 +587,7 @@ class CreateVendorInput(sgqlc.types.Input):
 
 
 class CreateWarehouseProductInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('warehouse_id', 'on_hand', 'inventory_bin', 'inventory_overstock_bin', 'reserve_inventory', 'replenishment_level', 'replenishment_max_level', 'replenishment_increment', 'reorder_level', 'reorder_amount', 'custom', 'warehouse', 'value', 'value_currency', 'price')
     warehouse_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='warehouse_id')
     on_hand = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='on_hand')
@@ -604,7 +607,7 @@ class CreateWarehouseProductInput(sgqlc.types.Input):
 
 
 class CreateWebhookInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'name', 'url', 'shop_name')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='name')
@@ -613,34 +616,34 @@ class CreateWebhookInput(sgqlc.types.Input):
 
 
 class DeleteBillInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='id')
 
 
 class DeleteLotInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('lot_id',)
     lot_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='lot_id')
 
 
 class DeleteProductInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
 
 
 class DeleteVendorInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'vendor_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     vendor_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='vendor_id')
 
 
 class DeleteWarehouseProductInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku', 'warehouse_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -648,7 +651,7 @@ class DeleteWarehouseProductInput(sgqlc.types.Input):
 
 
 class DeleteWebhookInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'name', 'shop_name')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='name')
@@ -656,7 +659,7 @@ class DeleteWebhookInput(sgqlc.types.Input):
 
 
 class DimensionsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('weight', 'height', 'width', 'length')
     weight = sgqlc.types.Field(String, graphql_name='weight')
     height = sgqlc.types.Field(String, graphql_name='height')
@@ -665,7 +668,7 @@ class DimensionsInput(sgqlc.types.Input):
 
 
 class FulfillOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'tote_id', 'packages', 'notify_customer_via_shiphero', 'notify_customer_via_store', 'shipped_off_shiphero', 'note')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -678,7 +681,7 @@ class FulfillOrderInput(sgqlc.types.Input):
 
 
 class HoldsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('payment_hold', 'operator_hold', 'fraud_hold', 'address_hold', 'client_hold')
     payment_hold = sgqlc.types.Field(Boolean, graphql_name='payment_hold')
     operator_hold = sgqlc.types.Field(Boolean, graphql_name='operator_hold')
@@ -688,14 +691,14 @@ class HoldsInput(sgqlc.types.Input):
 
 
 class InventoryAbortSnapshotInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('snapshot_id', 'reason')
     snapshot_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='snapshot_id')
     reason = sgqlc.types.Field(String, graphql_name='reason')
 
 
 class InventoryGenerateSnapshotInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'warehouse_id', 'notification_email', 'post_url', 'post_url_pre_check', 'new_format', 'updated_from', 'has_inventory')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     warehouse_id = sgqlc.types.Field(String, graphql_name='warehouse_id')
@@ -708,7 +711,7 @@ class InventoryGenerateSnapshotInput(sgqlc.types.Input):
 
 
 class InventorySyncInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'url', 'warehouse_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     url = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='url')
@@ -716,7 +719,7 @@ class InventorySyncInput(sgqlc.types.Input):
 
 
 class LineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('product_name', 'sku', 'quantity')
     product_name = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='product_name')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -724,27 +727,27 @@ class LineItemInput(sgqlc.types.Input):
 
 
 class OrderNoteAttributeInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('name', 'value')
     name = sgqlc.types.Field(String, graphql_name='name')
     value = sgqlc.types.Field(String, graphql_name='value')
 
 
 class PackageInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('line_items',)
     line_items = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('PackageLineItemInput')), graphql_name='line_items')
 
 
 class PackageLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sku', 'quantity')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
 
 
 class PalletData(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('quantity', 'kind', 'page_size', 'floor_loaded')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
     kind = sgqlc.types.Field(String, graphql_name='kind')
@@ -753,21 +756,21 @@ class PalletData(sgqlc.types.Input):
 
 
 class RecalculateBillInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='id')
 
 
 class RemoveKitComponentInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
 
 
 class RemoveKitComponentsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku', 'components')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -775,7 +778,7 @@ class RemoveKitComponentsInput(sgqlc.types.Input):
 
 
 class RemoveLineItemsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'line_item_ids')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -783,7 +786,7 @@ class RemoveLineItemsInput(sgqlc.types.Input):
 
 
 class RemoveProductFromVendorInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'vendor_id', 'sku')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     vendor_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='vendor_id')
@@ -791,7 +794,7 @@ class RemoveProductFromVendorInput(sgqlc.types.Input):
 
 
 class ReplaceInventoryInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku', 'warehouse_id', 'quantity', 'reason', 'location_id', 'includes_non_sellable')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -803,7 +806,7 @@ class ReplaceInventoryInput(sgqlc.types.Input):
 
 
 class SetPurchaseOrderFulfillmentStatusInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'po_id', 'status')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     po_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='po_id')
@@ -811,14 +814,14 @@ class SetPurchaseOrderFulfillmentStatusInput(sgqlc.types.Input):
 
 
 class ShippedLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('quantity', 'sku')
     quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='quantity')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
 
 
 class ShippedPackagesInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('address', 'carrier', 'method', 'tracking_number', 'tracking_url', 'label_url', 'cost', 'line_items', 'dimensions')
     address = sgqlc.types.Field(sgqlc.types.non_null(CreateOrderAddressInput), graphql_name='address')
     carrier = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='carrier')
@@ -832,14 +835,14 @@ class ShippedPackagesInput(sgqlc.types.Input):
 
 
 class SubmitBillInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='id')
 
 
 class TransferInventoryInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku', 'warehouse_id', 'quantity', 'location_from_id', 'location_to_id', 'reason')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -851,7 +854,7 @@ class TransferInventoryInput(sgqlc.types.Input):
 
 
 class UpdateBillInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'id', 'status')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='id')
@@ -859,7 +862,7 @@ class UpdateBillInput(sgqlc.types.Input):
 
 
 class UpdateInventoryInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku', 'warehouse_id', 'quantity', 'reason', 'location_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -870,7 +873,7 @@ class UpdateInventoryInput(sgqlc.types.Input):
 
 
 class UpdateLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'partner_line_item_id', 'quantity', 'price', 'product_name', 'option_title', 'fulfillment_status', 'quantity_pending_fulfillment', 'custom_options', 'custom_barcode', 'eligible_for_return', 'customs_value', 'warehouse_id', 'barcode')
     id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='id')
     partner_line_item_id = sgqlc.types.Field(String, graphql_name='partner_line_item_id')
@@ -889,7 +892,7 @@ class UpdateLineItemInput(sgqlc.types.Input):
 
 
 class UpdateLineItemsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'line_items')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -897,7 +900,7 @@ class UpdateLineItemsInput(sgqlc.types.Input):
 
 
 class UpdateLocationInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('location_id', 'zone', 'location_type_id', 'pickable', 'sellable', 'is_cart', 'pick_priority', 'dimensions', 'temperature')
     location_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='location_id')
     zone = sgqlc.types.Field(String, graphql_name='zone')
@@ -911,7 +914,7 @@ class UpdateLocationInput(sgqlc.types.Input):
 
 
 class UpdateLotInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('lot_id', 'name', 'sku', 'expires_at', 'is_active')
     lot_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='lot_id')
     name = sgqlc.types.Field(String, graphql_name='name')
@@ -921,14 +924,14 @@ class UpdateLotInput(sgqlc.types.Input):
 
 
 class UpdateLotsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('lots_ids', 'is_active')
     lots_ids = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of(String)), graphql_name='lots_ids')
     is_active = sgqlc.types.Field(Boolean, graphql_name='is_active')
 
 
 class UpdateOrderFulfillmentStatusInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'fulfillment_status', 'remove_inventory', 'reason', 'void_on_platform')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -939,7 +942,7 @@ class UpdateOrderFulfillmentStatusInput(sgqlc.types.Input):
 
 
 class UpdateOrderHoldsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'payment_hold', 'operator_hold', 'fraud_hold', 'address_hold', 'client_hold')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -951,7 +954,7 @@ class UpdateOrderHoldsInput(sgqlc.types.Input):
 
 
 class UpdateOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'order_number', 'partner_order_id', 'fulfillment_status', 'order_date', 'total_tax', 'subtotal', 'total_discounts', 'total_price', 'box_name', 'ready_to_ship', 'insurance_amount', 'required_ship_date', 'allocation_priority', 'shipping_lines', 'shipping_address', 'billing_address', 'profile', 'packing_note', 'note_attributes', 'tags', 'gift_note', 'gift_invoice', 'require_signature', 'adult_signature_required', 'alcohol', 'insurance', 'allow_partial', 'allow_split', 'priority_flag', 'hold_until_date', 'incoterms', 'tax_id', 'tax_type', 'history_entry', 'ignore_address_validation_errors', 'skip_address_validation', 'custom_invoice_url', 'auto_print_return_label', 'dry_ice_weight_in_lbs', 'ftr_exemption', 'address_is_business')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -999,28 +1002,28 @@ class UpdateOrderInput(sgqlc.types.Input):
 
 
 class UpdateOrderInputBase(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
 
 
 class UpdateProductCaseInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('case_barcode', 'case_quantity')
     case_barcode = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='case_barcode')
     case_quantity = sgqlc.types.Field(sgqlc.types.non_null(Int), graphql_name='case_quantity')
 
 
 class UpdateProductImageInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('src', 'position')
     src = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='src')
     position = sgqlc.types.Field(Int, graphql_name='position')
 
 
 class UpdateProductInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku', 'name', 'dimensions', 'tariff_code', 'product_note', 'country_of_manufacture', 'needs_serial_number', 'dropship', 'barcode', 'customs_description', 'ignore_on_customs', 'ignore_on_invoice', 'tags', 'vendors', 'final_sale', 'virtual', 'needs_lot_tracking', 'images', 'packer_note', 'cases')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -1046,7 +1049,7 @@ class UpdateProductInput(sgqlc.types.Input):
 
 
 class UpdateProductVendorInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'vendor_id', 'vendor_sku', 'price')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     vendor_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='vendor_id')
@@ -1055,7 +1058,7 @@ class UpdateProductVendorInput(sgqlc.types.Input):
 
 
 class UpdatePurchaseOrderInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'po_id', 'packing_note', 'po_note', 'description', 'partner_order_number', 'discount', 'tax', 'line_items', 'shipping_method', 'shipping_carrier', 'shipping_name', 'shipping_price', 'tracking_number', 'pdf', 'payment_method', 'payment_due_by', 'payment_note', 'po_date', 'clear_po_date')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     po_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='po_id')
@@ -1080,7 +1083,7 @@ class UpdatePurchaseOrderInput(sgqlc.types.Input):
 
 
 class UpdatePurchaseOrderLineItemInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('sku', 'quantity', 'quantity_received', 'quantity_rejected', 'sell_ahead', 'price', 'note')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
     quantity = sgqlc.types.Field(Int, graphql_name='quantity')
@@ -1092,14 +1095,14 @@ class UpdatePurchaseOrderLineItemInput(sgqlc.types.Input):
 
 
 class UpdateReturnStatusInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('return_id', 'status')
     return_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='return_id')
     status = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='status')
 
 
 class UpdateTagsInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'order_id', 'tags')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     order_id = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='order_id')
@@ -1107,7 +1110,7 @@ class UpdateTagsInput(sgqlc.types.Input):
 
 
 class UpdateWarehouseProductInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('customer_account_id', 'sku', 'warehouse_id', 'on_hand', 'price', 'value', 'value_currency', 'inventory_bin', 'inventory_overstock_bin', 'reserve_inventory', 'replenishment_level', 'reorder_amount', 'reorder_level', 'customs_value', 'active', 'replenishment_max_level', 'replenishment_increment')
     customer_account_id = sgqlc.types.Field(String, graphql_name='customer_account_id')
     sku = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='sku')
@@ -1129,7 +1132,7 @@ class UpdateWarehouseProductInput(sgqlc.types.Input):
 
 
 class UserNoteInput(sgqlc.types.Input):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('source', 'message')
     source = sgqlc.types.Field(String, graphql_name='source')
     message = sgqlc.types.Field(String, graphql_name='message')
@@ -1140,13 +1143,13 @@ class UserNoteInput(sgqlc.types.Input):
 # Output Objects and Interfaces
 ########################################################################
 class Node(sgqlc.types.Interface):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id',)
     id = sgqlc.types.Field(sgqlc.types.non_null(ID), graphql_name='id')
 
 
 class AbortInventorySyncOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'sync')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1154,7 +1157,7 @@ class AbortInventorySyncOutput(sgqlc.types.Type):
 
 
 class Account(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'email', 'username', 'status', 'dynamic_slotting', 'is_multi_warehouse', 'is_3pl', 'cycle_count_enabled', 'ship_backorders', 'customers', 'warehouses')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1179,21 +1182,21 @@ class Account(sgqlc.types.Type):
 
 
 class AccountConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('AccountEdge')), graphql_name='edges')
 
 
 class AccountEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Account, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class AccountQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1201,7 +1204,7 @@ class AccountQueryResult(sgqlc.types.Type):
 
 
 class AddPurchaseOrderAttachmentOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'attachment')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1209,7 +1212,7 @@ class AddPurchaseOrderAttachmentOutput(sgqlc.types.Type):
 
 
 class Address(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('name', 'address1', 'address2', 'city', 'state', 'country', 'zip', 'phone')
     name = sgqlc.types.Field(String, graphql_name='name')
     address1 = sgqlc.types.Field(String, graphql_name='address1')
@@ -1222,7 +1225,7 @@ class Address(sgqlc.types.Type):
 
 
 class AssignLotToLocationOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'warehouse_product')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1230,7 +1233,7 @@ class AssignLotToLocationOutput(sgqlc.types.Type):
 
 
 class Authorization(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('transaction_id', 'authorized_amount', 'postauthed_amount', 'refunded_amount', 'card_type', 'date')
     transaction_id = sgqlc.types.Field(String, graphql_name='transaction_id')
     authorized_amount = sgqlc.types.Field(String, graphql_name='authorized_amount')
@@ -1241,7 +1244,7 @@ class Authorization(sgqlc.types.Type):
 
 
 class Bill(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'status', 'customer_name', 'profile_name', 'created_at', 'due_date', 'amount', 'totals', 'bill_exports', 'billing_period', 'billing_frequency')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1272,21 +1275,21 @@ class Bill(sgqlc.types.Type):
 
 
 class BillConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('BillEdge')), graphql_name='edges')
 
 
 class BillEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Bill, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class BillExports(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'status', 'file_url')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1295,21 +1298,21 @@ class BillExports(sgqlc.types.Type):
 
 
 class BillExportsConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('BillExportsEdge')), graphql_name='edges')
 
 
 class BillExportsEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(BillExports, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class BillQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1317,14 +1320,14 @@ class BillQueryResult(sgqlc.types.Type):
 
 
 class BillingPeriod(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('start', 'end')
     start = sgqlc.types.Field(ISODateTime, graphql_name='start')
     end = sgqlc.types.Field(ISODateTime, graphql_name='end')
 
 
 class BillsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1339,7 +1342,7 @@ class BillsQueryResult(sgqlc.types.Type):
 
 
 class CancelPurchaseOrderOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'purchase_order')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1347,7 +1350,7 @@ class CancelPurchaseOrderOutput(sgqlc.types.Type):
 
 
 class Case(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'case_barcode', 'case_quantity')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1356,7 +1359,7 @@ class Case(sgqlc.types.Type):
 
 
 class ClosePurchaseOrderOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'purchase_order')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1364,7 +1367,7 @@ class ClosePurchaseOrderOutput(sgqlc.types.Type):
 
 
 class CreateBillOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'bill')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1372,7 +1375,7 @@ class CreateBillOutput(sgqlc.types.Type):
 
 
 class CreateLotOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'lot')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1380,7 +1383,7 @@ class CreateLotOutput(sgqlc.types.Type):
 
 
 class CreateProductOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'product')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1388,7 +1391,7 @@ class CreateProductOutput(sgqlc.types.Type):
 
 
 class CreatePurchaseOrderOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'purchase_order')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1396,7 +1399,7 @@ class CreatePurchaseOrderOutput(sgqlc.types.Type):
 
 
 class CreateReturnExchangeOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'return_exchange')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1404,7 +1407,7 @@ class CreateReturnExchangeOutput(sgqlc.types.Type):
 
 
 class CreateReturnOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'return_')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1412,7 +1415,7 @@ class CreateReturnOutput(sgqlc.types.Type):
 
 
 class CreateShipmentOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'shipment')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1420,7 +1423,7 @@ class CreateShipmentOutput(sgqlc.types.Type):
 
 
 class CreateShippingLabelOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'shipping_label')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1428,7 +1431,7 @@ class CreateShippingLabelOutput(sgqlc.types.Type):
 
 
 class CreateShippingPlanOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'shipping_plan')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1436,7 +1439,7 @@ class CreateShippingPlanOutput(sgqlc.types.Type):
 
 
 class CreateVendorOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'vendor')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1444,7 +1447,7 @@ class CreateVendorOutput(sgqlc.types.Type):
 
 
 class CreateWebhookOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'webhook')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1452,7 +1455,7 @@ class CreateWebhookOutput(sgqlc.types.Type):
 
 
 class CurrentUserQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1460,7 +1463,7 @@ class CurrentUserQueryResult(sgqlc.types.Type):
 
 
 class DeleteLotOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'lot')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1468,7 +1471,7 @@ class DeleteLotOutput(sgqlc.types.Type):
 
 
 class Dimensions(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('weight', 'height', 'width', 'length')
     weight = sgqlc.types.Field(String, graphql_name='weight')
     height = sgqlc.types.Field(String, graphql_name='height')
@@ -1477,7 +1480,7 @@ class Dimensions(sgqlc.types.Type):
 
 
 class FbaInventory(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'quantity', 'marketplace_id', 'merchant_id')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1487,7 +1490,7 @@ class FbaInventory(sgqlc.types.Type):
 
 
 class FeeCategoryTotal(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'amount', 'label', 'category', 'quantity')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1498,21 +1501,21 @@ class FeeCategoryTotal(sgqlc.types.Type):
 
 
 class FeeCategoryTotalConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('FeeCategoryTotalEdge')), graphql_name='edges')
 
 
 class FeeCategoryTotalEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(FeeCategoryTotal, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class FulfillmentInvoice(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'stripe_charge_id', 'stripe_invoice_id', 'stripe_invoice_number', 'stripe_invoice_status', 'stripe_invoice_url', 'stripe_next_payment_attempt', 'account_id', 'cc_info', 'amount', 'created_at', 'shipping_items', 'inbound_shipping_items', 'returns_items', 'storage_items')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1561,21 +1564,21 @@ class FulfillmentInvoice(sgqlc.types.Type):
 
 
 class FulfillmentInvoiceConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('FulfillmentInvoiceEdge')), graphql_name='edges')
 
 
 class FulfillmentInvoiceEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(FulfillmentInvoice, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class FulfillmentInvoiceInboundShippingItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'invoice_id', 'purchase_order_id', 'shipment_id', 'shipping_label_id', 'amount', 'cost', 'created_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1590,21 +1593,21 @@ class FulfillmentInvoiceInboundShippingItem(sgqlc.types.Type):
 
 
 class FulfillmentInvoiceInboundShippingItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('FulfillmentInvoiceInboundShippingItemEdge')), graphql_name='edges')
 
 
 class FulfillmentInvoiceInboundShippingItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(FulfillmentInvoiceInboundShippingItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class FulfillmentInvoiceQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1612,7 +1615,7 @@ class FulfillmentInvoiceQueryResult(sgqlc.types.Type):
 
 
 class FulfillmentInvoiceReturnItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'invoice_id', 'order_id', 'rma_id', 'rma_label_id', 'amount', 'shipping_rate', 'picking_fee', 'inspection_fee', 'restocking_fee', 'created_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1630,21 +1633,21 @@ class FulfillmentInvoiceReturnItem(sgqlc.types.Type):
 
 
 class FulfillmentInvoiceReturnItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('FulfillmentInvoiceReturnItemEdge')), graphql_name='edges')
 
 
 class FulfillmentInvoiceReturnItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(FulfillmentInvoiceReturnItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class FulfillmentInvoiceShippingItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'invoice_id', 'order_id', 'shipment_id', 'shipping_label_id', 'amount', 'shipping_rate', 'processing_fee', 'picking_fee', 'overcharge_fee', 'created_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1662,21 +1665,21 @@ class FulfillmentInvoiceShippingItem(sgqlc.types.Type):
 
 
 class FulfillmentInvoiceShippingItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('FulfillmentInvoiceShippingItemEdge')), graphql_name='edges')
 
 
 class FulfillmentInvoiceShippingItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(FulfillmentInvoiceShippingItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class FulfillmentInvoiceStorageItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'warehouse_id', 'invoice_id', 'amount', 'created_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1688,21 +1691,21 @@ class FulfillmentInvoiceStorageItem(sgqlc.types.Type):
 
 
 class FulfillmentInvoiceStorageItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('FulfillmentInvoiceStorageItemEdge')), graphql_name='edges')
 
 
 class FulfillmentInvoiceStorageItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(FulfillmentInvoiceStorageItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class FulfillmentInvoicesQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1717,7 +1720,7 @@ class FulfillmentInvoicesQueryResult(sgqlc.types.Type):
 
 
 class InventoryChange(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'user_id', 'account_id', 'warehouse_id', 'sku', 'previous_on_hand', 'change_in_on_hand', 'reason', 'cycle_counted', 'location_id', 'created_at', 'product', 'location')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1736,21 +1739,21 @@ class InventoryChange(sgqlc.types.Type):
 
 
 class InventoryChangeConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('InventoryChangeEdge')), graphql_name='edges')
 
 
 class InventoryChangeEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(InventoryChange, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class InventoryChangesQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1765,7 +1768,7 @@ class InventoryChangesQueryResult(sgqlc.types.Type):
 
 
 class InventorySnapshot(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('snapshot_id', 'job_user_id', 'job_account_id', 'warehouse_id', 'customer_account_id', 'notification_email', 'email_error', 'post_url', 'post_error', 'post_url_pre_check', 'status', 'error', 'created_at', 'enqueued_at', 'updated_at', 'snapshot_url', 'snapshot_expiration', 'new_format')
     snapshot_id = sgqlc.types.Field(String, graphql_name='snapshot_id')
     job_user_id = sgqlc.types.Field(String, graphql_name='job_user_id')
@@ -1788,21 +1791,21 @@ class InventorySnapshot(sgqlc.types.Type):
 
 
 class InventorySnapshotConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('InventorySnapshotEdge')), graphql_name='edges')
 
 
 class InventorySnapshotEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(InventorySnapshot, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class InventorySnapshotOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'snapshot')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1810,7 +1813,7 @@ class InventorySnapshotOutput(sgqlc.types.Type):
 
 
 class InventorySnapshotQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'snapshot')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1818,7 +1821,7 @@ class InventorySnapshotQueryResult(sgqlc.types.Type):
 
 
 class InventorySnapshotsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'snapshots')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1833,7 +1836,7 @@ class InventorySnapshotsQueryResult(sgqlc.types.Type):
 
 
 class InventorySyncBatchQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1841,7 +1844,7 @@ class InventorySyncBatchQueryResult(sgqlc.types.Type):
 
 
 class InventorySyncBatchesQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1856,7 +1859,7 @@ class InventorySyncBatchesQueryResult(sgqlc.types.Type):
 
 
 class InventorySyncItemStatus(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'row', 'sku', 'quantity', 'action', 'reason', 'location', 'status', 'error', 'created_at', 'updated_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     row = sgqlc.types.Field(Int, graphql_name='row')
@@ -1872,21 +1875,21 @@ class InventorySyncItemStatus(sgqlc.types.Type):
 
 
 class InventorySyncItemStatusConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('InventorySyncItemStatusEdge')), graphql_name='edges')
 
 
 class InventorySyncItemStatusEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(InventorySyncItemStatus, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class InventorySyncOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'sync_id')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1894,7 +1897,7 @@ class InventorySyncOutput(sgqlc.types.Type):
 
 
 class InventorySyncRowsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -1909,7 +1912,7 @@ class InventorySyncRowsQueryResult(sgqlc.types.Type):
 
 
 class InventorySyncStatus(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'url', 'user_id', 'account_id', 'warehouse_id', 'customer_account_id', 'total_count', 'status', 'error', 'created_at', 'updated_at', 'success_count', 'error_count', 'finished_count')
     id = sgqlc.types.Field(String, graphql_name='id')
     url = sgqlc.types.Field(String, graphql_name='url')
@@ -1928,21 +1931,21 @@ class InventorySyncStatus(sgqlc.types.Type):
 
 
 class InventorySyncStatusConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('InventorySyncStatusEdge')), graphql_name='edges')
 
 
 class InventorySyncStatusEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(InventorySyncStatus, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ItemLocation(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'warehouse_id', 'location_id', 'sku', 'quantity', 'created_at', 'location', 'expiration_lot')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1957,21 +1960,21 @@ class ItemLocation(sgqlc.types.Type):
 
 
 class ItemLocationConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ItemLocationEdge')), graphql_name='edges')
 
 
 class ItemLocationEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ItemLocation, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class KitComponent(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'sku', 'quantity')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -1981,7 +1984,7 @@ class KitComponent(sgqlc.types.Type):
 
 
 class LabelResource(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('pdf_location', 'paper_pdf_location', 'thermal_pdf_location', 'image_location')
     pdf_location = sgqlc.types.Field(String, graphql_name='pdf_location')
     paper_pdf_location = sgqlc.types.Field(String, graphql_name='paper_pdf_location')
@@ -1990,7 +1993,7 @@ class LabelResource(sgqlc.types.Type):
 
 
 class LastMileLabel(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'shipping_carrier', 'shipping_method', 'tracking_number', 'tracking_url')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2001,14 +2004,14 @@ class LastMileLabel(sgqlc.types.Type):
 
 
 class LegacyId(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('legacy_id', 'id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
     id = sgqlc.types.Field(String, graphql_name='id')
 
 
 class LegacyIdQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2016,7 +2019,7 @@ class LegacyIdQueryResult(sgqlc.types.Type):
 
 
 class LineItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'sku', 'partner_line_item_id', 'product_id', 'quantity', 'price', 'product_name', 'option_title', 'fulfillment_status', 'quantity_pending_fulfillment', 'quantity_shipped', 'warehouse', 'quantity_allocated', 'backorder_quantity', 'custom_options', 'custom_barcode', 'eligible_for_return', 'customs_value', 'warehouse_id', 'locked_to_warehouse_id', 'subtotal', 'barcode', 'created_at', 'updated_at', 'order_id', 'shipped_line_item_lots', 'serial_numbers', 'promotion_discount', 'product', 'tote_picks')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2052,7 +2055,7 @@ class LineItem(sgqlc.types.Type):
 
 
 class LineItemQuerySpecConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges', 'total_count')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('LineItemQuerySpecEdge')), graphql_name='edges')
@@ -2060,14 +2063,14 @@ class LineItemQuerySpecConnection(sgqlc.types.relay.Connection):
 
 
 class LineItemQuerySpecEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(LineItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class LineItemSerialNumber(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'line_item_id', 'serial_number', 'scanned', 'created_at', 'updated_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2079,7 +2082,7 @@ class LineItemSerialNumber(sgqlc.types.Type):
 
 
 class Location(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'warehouse_id', 'type', 'name', 'zone', 'pickable', 'sellable', 'is_cart', 'pick_priority', 'dimensions', 'length', 'width', 'height', 'max_weight', 'temperature', 'products', 'last_counted', 'created_at', 'expiration_lots')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2120,21 +2123,21 @@ class Location(sgqlc.types.Type):
 
 
 class LocationConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('LocationEdge')), graphql_name='edges')
 
 
 class LocationEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Location, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class LocationOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'location')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2142,7 +2145,7 @@ class LocationOutput(sgqlc.types.Type):
 
 
 class LocationQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2150,7 +2153,7 @@ class LocationQueryResult(sgqlc.types.Type):
 
 
 class LocationType(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'name', 'daily_storage_cost')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2160,7 +2163,7 @@ class LocationType(sgqlc.types.Type):
 
 
 class LocationsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2175,7 +2178,7 @@ class LocationsQueryResult(sgqlc.types.Type):
 
 
 class Lot(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'po_id', 'name', 'sku', 'created_at', 'updated_at', 'expires_at', 'received_at', 'is_active', 'locations')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2199,21 +2202,21 @@ class Lot(sgqlc.types.Type):
 
 
 class LotConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('LotEdge')), graphql_name='edges')
 
 
 class LotEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Lot, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class LotsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2228,14 +2231,14 @@ class LotsQueryResult(sgqlc.types.Type):
 
 
 class MergedOrder(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('order_id', 'is_master')
     order_id = sgqlc.types.Field(String, graphql_name='order_id')
     is_master = sgqlc.types.Field(Boolean, graphql_name='is_master')
 
 
 class Mutation(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'bill_create', 'bill_delete', 'bill_recalculate', 'bill_update', 'bill_submit', 'inventory_add', 'inventory_remove', 'inventory_transfer', 'inventory_subtract', 'inventory_replace', 'location_create', 'location_update', 'inventory_sync', 'inventory_sync_abort', 'inventory_generate_snapshot', 'inventory_abort_snapshot', 'lot_create', 'lot_update', 'lots_update', 'lot_delete', 'lot_assign_to_location', 'order_create', 'order_change_warehouse', 'order_cancel', 'order_update_fulfillment_status', 'order_add_line_items', 'order_remove_line_items', 'order_update_line_items', 'order_update_tags', 'order_add_tags', 'order_clear_tags', 'order_add_history_entry', 'order_update', 'order_update_holds', 'order_fulfill', 'product_create', 'product_add_to_warehouse', 'product_delete', 'warehouse_product_delete', 'product_update', 'warehouse_product_update', 'kit_build', 'kit_clear', 'kit_remove_components', 'purchase_order_create', 'purchase_order_update', 'purchase_order_close', 'purchase_order_cancel', 'purchase_order_set_fulfillment_status', 'purchase_order_add_attachment', 'return_create', 'return_create_exchange', 'return_update_status', 'shipment_create', 'shipment_create_shipping_label', 'shipping_plan_create', 'vendor_create', 'vendor_delete', 'vendor_add_product', 'vendor_remove_product', 'webhook_create', 'webhook_delete')
     node = sgqlc.types.Field(Node, graphql_name='node', args=sgqlc.types.ArgDict((
         ('id', sgqlc.types.Arg(sgqlc.types.non_null(ID), graphql_name='id', default=None)),
@@ -2492,14 +2495,14 @@ class Mutation(sgqlc.types.Type):
 
 
 class MutationOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
 
 
 class Order(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'order_number', 'partner_order_id', 'shop_name', 'fulfillment_status', 'order_date', 'total_tax', 'subtotal', 'total_discounts', 'total_price', 'box_name', 'ready_to_ship', 'auto_print_return_label', 'custom_invoice_url', 'account_id', 'updated_at', 'email', 'profile', 'gift_note', 'packing_note', 'required_ship_date', 'shipping_lines', 'shipping_address', 'billing_address', 'tags', 'line_items', 'authorizations', 'holds', 'shipments', 'returns', 'rma_labels', 'flagged', 'saturday_delivery', 'ignore_address_validation_errors', 'skip_address_validation', 'priority_flag', 'allocation_priority', 'allocations', 'source', 'third_party_shipper', 'gift_invoice', 'allow_partial', 'require_signature', 'adult_signature_required', 'alcohol', 'expected_weight_in_oz', 'insurance', 'insurance_amount', 'currency', 'has_dry_ice', 'allow_split', 'hold_until_date', 'incoterms', 'tax_id', 'tax_type', 'dry_ice_weight_in_lbs', 'ftr_exemption', 'address_is_business', 'order_history', 'merged_orders', 'attachments')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2582,7 +2585,7 @@ class Order(sgqlc.types.Type):
 
 
 class OrderAddress(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('first_name', 'last_name', 'company', 'address1', 'address2', 'city', 'state', 'state_code', 'zip', 'country', 'country_code', 'email', 'phone')
     first_name = sgqlc.types.Field(String, graphql_name='first_name')
     last_name = sgqlc.types.Field(String, graphql_name='last_name')
@@ -2600,7 +2603,7 @@ class OrderAddress(sgqlc.types.Type):
 
 
 class OrderAttachment(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'order_id', 'account_id', 'description', 'url', 'filename', 'file_type', 'file_size', 'created_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2615,7 +2618,7 @@ class OrderAttachment(sgqlc.types.Type):
 
 
 class OrderAttachmentQuerySpecConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges', 'total_count')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('OrderAttachmentQuerySpecEdge')), graphql_name='edges')
@@ -2623,28 +2626,28 @@ class OrderAttachmentQuerySpecConnection(sgqlc.types.relay.Connection):
 
 
 class OrderAttachmentQuerySpecEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(OrderAttachment, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class OrderConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('OrderEdge')), graphql_name='edges')
 
 
 class OrderEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Order, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class OrderHistory(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'order_id', 'user_id', 'account_id', 'username', 'order_number', 'information', 'created_at', 'order')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2659,21 +2662,21 @@ class OrderHistory(sgqlc.types.Type):
 
 
 class OrderHistoryConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('OrderHistoryEdge')), graphql_name='edges')
 
 
 class OrderHistoryEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(OrderHistory, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class OrderHistoryQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2688,7 +2691,7 @@ class OrderHistoryQueryResult(sgqlc.types.Type):
 
 
 class OrderHolds(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('fraud_hold', 'address_hold', 'shipping_method_hold', 'operator_hold', 'payment_hold', 'client_hold')
     fraud_hold = sgqlc.types.Field(Boolean, graphql_name='fraud_hold')
     address_hold = sgqlc.types.Field(Boolean, graphql_name='address_hold')
@@ -2699,7 +2702,7 @@ class OrderHolds(sgqlc.types.Type):
 
 
 class OrderLineItemAllocation(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('order_id', 'warehouse_id', 'allocated_at', 'line_item_id', 'sku', 'quantity_allocated', 'is_kit_component', 'allocation_reference')
     order_id = sgqlc.types.Field(String, graphql_name='order_id')
     warehouse_id = sgqlc.types.Field(String, graphql_name='warehouse_id')
@@ -2712,7 +2715,7 @@ class OrderLineItemAllocation(sgqlc.types.Type):
 
 
 class OrderMutationOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'order')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2720,7 +2723,7 @@ class OrderMutationOutput(sgqlc.types.Type):
 
 
 class OrderQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2728,7 +2731,7 @@ class OrderQueryResult(sgqlc.types.Type):
 
 
 class OrderShipmentMutationOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'shipment')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2736,7 +2739,7 @@ class OrderShipmentMutationOutput(sgqlc.types.Type):
 
 
 class OrderThirdPartyShipper(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('account_number', 'zip', 'country')
     account_number = sgqlc.types.Field(String, graphql_name='account_number')
     zip = sgqlc.types.Field(String, graphql_name='zip')
@@ -2744,7 +2747,7 @@ class OrderThirdPartyShipper(sgqlc.types.Type):
 
 
 class OrderWarehouseAllocation(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('order_id', 'warehouse_id', 'allocated_at', 'allocation_reference', 'ready_to_ship', 'line_items', 'is_locked')
     order_id = sgqlc.types.Field(String, graphql_name='order_id')
     warehouse_id = sgqlc.types.Field(String, graphql_name='warehouse_id')
@@ -2756,7 +2759,7 @@ class OrderWarehouseAllocation(sgqlc.types.Type):
 
 
 class OrdersQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2771,7 +2774,7 @@ class OrdersQueryResult(sgqlc.types.Type):
 
 
 class Package(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'shipment_id', 'warehouse_id', 'order_id', 'order_number', 'user_id', 'user_first_name', 'user_last_name', 'total_items', 'unique_items', 'barcodes_scanned', 'created_at', 'shipment', 'order')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2791,21 +2794,21 @@ class Package(sgqlc.types.Type):
 
 
 class PackageConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null('PageInfo'), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('PackageEdge')), graphql_name='edges')
 
 
 class PackageEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Package, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class PacksPerDayQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2820,7 +2823,7 @@ class PacksPerDayQueryResult(sgqlc.types.Type):
 
 
 class PageInfo(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('has_next_page', 'has_previous_page', 'start_cursor', 'end_cursor')
     has_next_page = sgqlc.types.Field(sgqlc.types.non_null(Boolean), graphql_name='hasNextPage')
     has_previous_page = sgqlc.types.Field(sgqlc.types.non_null(Boolean), graphql_name='hasPreviousPage')
@@ -2829,7 +2832,7 @@ class PageInfo(sgqlc.types.Type):
 
 
 class Pick(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'user_id', 'tote_id', 'line_item_id', 'pending_shipment_line_item_id', 'location_id', 'warehouse_id', 'order_id', 'order_number', 'user_first_name', 'user_last_name', 'inventory_bin', 'sku', 'quantity', 'picked_quantity', 'pick_type', 'barcode_scanned', 'created_at', 'line_item', 'order')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2855,21 +2858,21 @@ class Pick(sgqlc.types.Type):
 
 
 class PickConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('PickEdge')), graphql_name='edges')
 
 
 class PickEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Pick, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class PicksPerDayQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2884,7 +2887,7 @@ class PicksPerDayQueryResult(sgqlc.types.Type):
 
 
 class Product(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'name', 'sku', 'price', 'value', 'value_currency', 'barcode', 'country_of_manufacture', 'dimensions', 'tariff_code', 'kit', 'kit_build', 'no_air', 'final_sale', 'customs_value', 'customs_description', 'not_owned', 'dropship', 'needs_serial_number', 'thumbnail', 'large_thumbnail', 'created_at', 'updated_at', 'product_note', 'virtual', 'ignore_on_invoice', 'ignore_on_customs', 'active', 'needs_lot_tracking', 'warehouse_products', 'fba_inventory', 'images', 'tags', 'vendors', 'components', 'kit_components', 'cases', 'packer_note')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -2929,28 +2932,28 @@ class Product(sgqlc.types.Type):
 
 
 class ProductConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ProductEdge')), graphql_name='edges')
 
 
 class ProductEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Product, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ProductImage(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('src', 'position')
     src = sgqlc.types.Field(String, graphql_name='src')
     position = sgqlc.types.Field(Int, graphql_name='position')
 
 
 class ProductMutationOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'product')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2958,7 +2961,7 @@ class ProductMutationOutput(sgqlc.types.Type):
 
 
 class ProductQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2966,7 +2969,7 @@ class ProductQueryResult(sgqlc.types.Type):
 
 
 class ProductVendor(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('vendor_id', 'vendor_sku', 'price')
     vendor_id = sgqlc.types.Field(String, graphql_name='vendor_id')
     vendor_sku = sgqlc.types.Field(String, graphql_name='vendor_sku')
@@ -2974,7 +2977,7 @@ class ProductVendor(sgqlc.types.Type):
 
 
 class ProductsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -2989,7 +2992,7 @@ class ProductsQueryResult(sgqlc.types.Type):
 
 
 class PurchaseOrder(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'po_number', 'account_id', 'warehouse_id', 'vendor_id', 'created_at', 'po_date', 'date_closed', 'arrived_at', 'packing_note', 'fulfillment_status', 'po_note', 'description', 'partner_order_number', 'subtotal', 'discount', 'total_price', 'tax', 'shipping_method', 'shipping_carrier', 'shipping_name', 'shipping_price', 'tracking_number', 'pdf', 'images', 'payment_method', 'payment_due_by', 'payment_note', 'locking', 'locked_by_user_id', 'line_items', 'attachments', 'vendor', 'warehouse', 'origin_of_shipment', 'tracking_numbers', 'ship_date')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3053,7 +3056,7 @@ class PurchaseOrder(sgqlc.types.Type):
 
 
 class PurchaseOrderAttachment(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'user_id', 'account_id', 'po_li_sku', 'description', 'filename', 'file_type', 'file_size', 'created_at', 'url')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3069,35 +3072,35 @@ class PurchaseOrderAttachment(sgqlc.types.Type):
 
 
 class PurchaseOrderAttachmentConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('PurchaseOrderAttachmentEdge')), graphql_name='edges')
 
 
 class PurchaseOrderAttachmentEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(PurchaseOrderAttachment, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class PurchaseOrderConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('PurchaseOrderEdge')), graphql_name='edges')
 
 
 class PurchaseOrderEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(PurchaseOrder, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class PurchaseOrderLineItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'po_id', 'account_id', 'warehouse_id', 'vendor_id', 'po_number', 'sku', 'vendor_sku', 'product_id', 'variant_id', 'quantity', 'quantity_received', 'quantity_rejected', 'price', 'product_name', 'option_title', 'expected_weight_in_lbs', 'fulfillment_status', 'sell_ahead', 'note', 'partner_line_item_id', 'barcode', 'updated_at', 'created_at', 'vendor', 'product', 'expiration_lots')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3137,21 +3140,21 @@ class PurchaseOrderLineItem(sgqlc.types.Type):
 
 
 class PurchaseOrderLineItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('PurchaseOrderLineItemEdge')), graphql_name='edges')
 
 
 class PurchaseOrderLineItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(PurchaseOrderLineItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class PurchaseOrderQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3159,7 +3162,7 @@ class PurchaseOrderQueryResult(sgqlc.types.Type):
 
 
 class PurchaseOrderTrackingNumber(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'po_id', 'carrier_id', 'carrier_value', 'tracking_number')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3170,21 +3173,21 @@ class PurchaseOrderTrackingNumber(sgqlc.types.Type):
 
 
 class PurchaseOrderTrackingNumberConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('PurchaseOrderTrackingNumberEdge')), graphql_name='edges')
 
 
 class PurchaseOrderTrackingNumberEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(PurchaseOrderTrackingNumber, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class PurchaseOrdersQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3199,7 +3202,7 @@ class PurchaseOrdersQueryResult(sgqlc.types.Type):
 
 
 class Query(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'account', 'me', 'uuid', 'bill', 'bills', 'fulfillment_invoice', 'fulfillment_invoices', 'location', 'locations', 'inventory_changes', 'inventory_sync_status', 'inventory_sync_items_status', 'inventory_sync_statuses', 'inventory_snapshot', 'inventory_snapshots', 'expiration_lots', 'order', 'orders', 'order_history', 'packs_per_day', 'picks_per_day', 'product', 'products', 'warehouse_products', 'purchase_order', 'purchase_orders', 'return_', 'returns', 'return_exchange', 'shipment', 'shipments', 'shipping_plan', 'tote_history', 'tote', 'user_quota', 'vendors', 'webhooks')
     node = sgqlc.types.Field(Node, graphql_name='node', args=sgqlc.types.ArgDict((
         ('id', sgqlc.types.Arg(sgqlc.types.non_null(ID), graphql_name='id', default=None)),
@@ -3476,7 +3479,7 @@ class Query(sgqlc.types.Type):
 
 
 class RMALabel(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'order_id', 'rma_id', 'shipment_id', 'shipping_name', 'tracking_number', 'status', 'carrier', 'shipping_method', 'cost', 'box_code', 'dimensions', 'address', 'paper_pdf_location', 'thermal_pdf_location', 'pdf_location', 'image_location', 'delivered', 'picked_up', 'refunded', 'needs_refund', 'profile', 'full_size_to_print', 'partner_fulfillment_id', 'created_at', 'updated_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3509,7 +3512,7 @@ class RMALabel(sgqlc.types.Type):
 
 
 class RMALabelType(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'tracking_number', 'status', 'created_date', 'carrier', 'shipping_method', 'cost', 'dimensions', 'length', 'width', 'height', 'weight', 'to_name', 'address1', 'address2', 'address_city', 'address_state', 'address_zip', 'address_country', 'pdf_location')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3535,7 +3538,7 @@ class RMALabelType(sgqlc.types.Type):
 
 
 class RecalculateBillOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'bill')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3543,7 +3546,7 @@ class RecalculateBillOutput(sgqlc.types.Type):
 
 
 class Return(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'order_id', 'partner_id', 'reason', 'status', 'label_type', 'label_cost', 'labels', 'cost_to_customer', 'shipping_carrier', 'shipping_method', 'dimensions', 'address', 'line_items', 'total_items_expected', 'total_items_received', 'total_items_restocked', 'created_at', 'display_issue_refund', 'order', 'exchanges', 'return_history')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3572,21 +3575,21 @@ class Return(sgqlc.types.Type):
 
 
 class ReturnConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ReturnEdge')), graphql_name='edges')
 
 
 class ReturnEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Return, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ReturnExchange(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'exchange_order_id', 'return_id', 'account_id', 'exchange_order', 'exchange_items', 'original_return')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3599,7 +3602,7 @@ class ReturnExchange(sgqlc.types.Type):
 
 
 class ReturnExchangeItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'return_item_id', 'sku', 'quantity')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3609,7 +3612,7 @@ class ReturnExchangeItem(sgqlc.types.Type):
 
 
 class ReturnExchangeQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3617,7 +3620,7 @@ class ReturnExchangeQueryResult(sgqlc.types.Type):
 
 
 class ReturnHistory(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'return_id', 'account_id', 'user_id', 'created_at', 'body')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3629,7 +3632,7 @@ class ReturnHistory(sgqlc.types.Type):
 
 
 class ReturnLineItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'line_item_id', 'warehouse_id', 'product_id', 'return_id', 'quantity', 'quantity_received', 'restock', 'condition', 'is_component', 'type', 'reason', 'created_at', 'updated_at', 'line_item', 'warehouse')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3652,7 +3655,7 @@ class ReturnLineItem(sgqlc.types.Type):
 
 
 class ReturnQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3660,7 +3663,7 @@ class ReturnQueryResult(sgqlc.types.Type):
 
 
 class ReturnsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3675,7 +3678,7 @@ class ReturnsQueryResult(sgqlc.types.Type):
 
 
 class SetPurchaseOrderFulfillmentStatusOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'purchase_order')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3683,7 +3686,7 @@ class SetPurchaseOrderFulfillmentStatusOutput(sgqlc.types.Type):
 
 
 class Shipment(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'order_id', 'user_id', 'warehouse_id', 'pending_shipment_id', 'address', 'profile', 'picked_up', 'needs_refund', 'refunded', 'delivered', 'dropshipment', 'shipped_off_shiphero', 'completed', 'created_date', 'line_items', 'shipping_labels', 'warehouse', 'order', 'total_packages')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3716,7 +3719,7 @@ class Shipment(sgqlc.types.Type):
 
 
 class ShipmentConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges', 'total_count')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ShipmentEdge')), graphql_name='edges')
@@ -3724,14 +3727,14 @@ class ShipmentConnection(sgqlc.types.relay.Connection):
 
 
 class ShipmentEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Shipment, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ShipmentLineItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'line_item_id', 'shipment_id', 'shipping_label_id', 'quantity', 'line_item')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3743,21 +3746,21 @@ class ShipmentLineItem(sgqlc.types.Type):
 
 
 class ShipmentLineItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ShipmentLineItemEdge')), graphql_name='edges')
 
 
 class ShipmentLineItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ShipmentLineItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ShipmentQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3765,7 +3768,7 @@ class ShipmentQueryResult(sgqlc.types.Type):
 
 
 class ShipmentsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -3781,7 +3784,7 @@ class ShipmentsQueryResult(sgqlc.types.Type):
 
 
 class ShippedLineItemLot(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'line_item_id', 'lot_id', 'lot_name', 'lot_expiration_date')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3792,7 +3795,7 @@ class ShippedLineItemLot(sgqlc.types.Type):
 
 
 class ShippingLabel(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'shipment_id', 'order_id', 'box_id', 'box_name', 'status', 'tracking_number', 'alternate_tracking_id', 'order_number', 'order_account_id', 'carrier', 'shipping_name', 'shipping_method', 'cost', 'box_code', 'device_id', 'delivered', 'picked_up', 'refunded', 'needs_refund', 'profile', 'partner_fulfillment_id', 'full_size_to_print', 'packing_slip', 'warehouse', 'warehouse_id', 'insurance_amount', 'carrier_account_id', 'source', 'created_date', 'tracking_url', 'dimensions', 'label', 'address', 'order', 'shipment_line_items', 'package_number', 'parcelview_url', 'tracking_status', 'in_shipping_container', 'last_mile_labels')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3847,7 +3850,7 @@ class ShippingLabel(sgqlc.types.Type):
 
 
 class ShippingLines(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('title', 'carrier', 'method', 'price')
     title = sgqlc.types.Field(String, graphql_name='title')
     carrier = sgqlc.types.Field(String, graphql_name='carrier')
@@ -3856,7 +3859,7 @@ class ShippingLines(sgqlc.types.Type):
 
 
 class ShippingPlan(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'warehouse_id', 'created_at', 'fulfillment_status', 'warehouse_note', 'vendor_po_number', 'subtotal', 'shipping_price', 'total_price', 'shipping_method', 'shipping_carrier', 'shipping_name', 'tracking_number', 'warehouse', 'pdf_location', 'line_items', 'packages', 'pallets', 'origin_of_shipment', 'tracking_numbers')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3911,7 +3914,7 @@ class ShippingPlan(sgqlc.types.Type):
 
 
 class ShippingPlanLineItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'warehouse_id', 'sku', 'vendor_sku', 'product_id', 'variant_id', 'quantity', 'quantity_received', 'quantity_rejected', 'price', 'product_name', 'option_title', 'expected_weight_in_lbs', 'fulfillment_status', 'sell_ahead', 'note', 'partner_line_item_id', 'barcode', 'updated_at', 'created_at', 'product')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3939,21 +3942,21 @@ class ShippingPlanLineItem(sgqlc.types.Type):
 
 
 class ShippingPlanLineItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ShippingPlanLineItemEdge')), graphql_name='edges')
 
 
 class ShippingPlanLineItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ShippingPlanLineItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ShippingPlanPackage(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'box_number', 'line_items')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3969,21 +3972,21 @@ class ShippingPlanPackage(sgqlc.types.Type):
 
 
 class ShippingPlanPackageConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ShippingPlanPackageEdge')), graphql_name='edges')
 
 
 class ShippingPlanPackageEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ShippingPlanPackage, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ShippingPlanPackageLineItem(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'sku', 'quantity', 'created_at', 'product')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -3994,21 +3997,21 @@ class ShippingPlanPackageLineItem(sgqlc.types.Type):
 
 
 class ShippingPlanPackageLineItemConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ShippingPlanPackageLineItemEdge')), graphql_name='edges')
 
 
 class ShippingPlanPackageLineItemEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ShippingPlanPackageLineItem, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ShippingPlanPallet(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'kind', 'quantity', 'floor_loaded', 'page_size')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4019,21 +4022,21 @@ class ShippingPlanPallet(sgqlc.types.Type):
 
 
 class ShippingPlanPalletConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ShippingPlanPalletEdge')), graphql_name='edges')
 
 
 class ShippingPlanPalletEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ShippingPlanPallet, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ShippingPlanQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4041,7 +4044,7 @@ class ShippingPlanQueryResult(sgqlc.types.Type):
 
 
 class ShippingPlanTrackingNumber(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'po_id', 'carrier_id', 'carrier_value', 'tracking_number')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4052,21 +4055,21 @@ class ShippingPlanTrackingNumber(sgqlc.types.Type):
 
 
 class ShippingPlanTrackingNumberConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ShippingPlanTrackingNumberEdge')), graphql_name='edges')
 
 
 class ShippingPlanTrackingNumberEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ShippingPlanTrackingNumber, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class Tote(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'name', 'barcode', 'warehouse', 'orders', 'picks')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4078,7 +4081,7 @@ class Tote(sgqlc.types.Type):
 
 
 class ToteContentQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4086,7 +4089,7 @@ class ToteContentQueryResult(sgqlc.types.Type):
 
 
 class ToteHistory(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('tote_name', 'tote_id', 'action', 'created_at')
     tote_name = sgqlc.types.Field(String, graphql_name='tote_name')
     tote_id = sgqlc.types.Field(String, graphql_name='tote_id')
@@ -4095,21 +4098,21 @@ class ToteHistory(sgqlc.types.Type):
 
 
 class ToteHistoryConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('ToteHistoryEdge')), graphql_name='edges')
 
 
 class ToteHistoryEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(ToteHistory, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class ToteHistoryQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4124,7 +4127,7 @@ class ToteHistoryQueryResult(sgqlc.types.Type):
 
 
 class TotePick(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'sku', 'created_at', 'updated_at', 'tote_id', 'current', 'picked_quantity', 'quantity', 'inventory_bin', 'line_item', 'location', 'deducted')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4142,7 +4145,7 @@ class TotePick(sgqlc.types.Type):
 
 
 class TransferInventoryOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'ok')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4150,7 +4153,7 @@ class TransferInventoryOutput(sgqlc.types.Type):
 
 
 class UpdateInventoryOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'warehouse_product')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4158,7 +4161,7 @@ class UpdateInventoryOutput(sgqlc.types.Type):
 
 
 class UpdateLotOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'lot')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4166,7 +4169,7 @@ class UpdateLotOutput(sgqlc.types.Type):
 
 
 class UpdateLotsOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'ok')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4174,7 +4177,7 @@ class UpdateLotsOutput(sgqlc.types.Type):
 
 
 class UpdatePurchaseOrderOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'purchase_order')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4182,7 +4185,7 @@ class UpdatePurchaseOrderOutput(sgqlc.types.Type):
 
 
 class UpdateReturnStatusOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'return_')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4190,7 +4193,7 @@ class UpdateReturnStatusOutput(sgqlc.types.Type):
 
 
 class User(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'email', 'first_name', 'last_name', 'account')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4201,7 +4204,7 @@ class User(sgqlc.types.Type):
 
 
 class UserQuota(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('is_expired', 'expiration_date', 'time_remaining', 'credits_remaining', 'max_available', 'increment_rate')
     is_expired = sgqlc.types.Field(Boolean, graphql_name='is_expired')
     expiration_date = sgqlc.types.Field(ISODateTime, graphql_name='expiration_date')
@@ -4212,7 +4215,7 @@ class UserQuota(sgqlc.types.Type):
 
 
 class Vendor(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'name', 'email', 'account_number', 'account_id', 'address', 'currency', 'internal_note', 'default_po_note', 'logo', 'partner_vendor_id', 'created_at')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4230,21 +4233,21 @@ class Vendor(sgqlc.types.Type):
 
 
 class VendorConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('VendorEdge')), graphql_name='edges')
 
 
 class VendorEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Vendor, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class VendorsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4259,7 +4262,7 @@ class VendorsQueryResult(sgqlc.types.Type):
 
 
 class Warehouse(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'identifier', 'dynamic_slotting', 'invoice_email', 'phone_number', 'profile', 'address', 'return_address', 'company_name', 'company_alias', 'products')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4284,7 +4287,7 @@ class Warehouse(sgqlc.types.Type):
 
 
 class WarehouseProduct(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'sku', 'warehouse_id', 'warehouse_identifier', 'price', 'value', 'value_currency', 'on_hand', 'inventory_bin', 'inventory_overstock_bin', 'reserve_inventory', 'replenishment_level', 'reorder_amount', 'reorder_level', 'backorder', 'allocated', 'available', 'non_sellable_quantity', 'in_tote', 'custom', 'customs_value', 'created_at', 'updated_at', 'sell_ahead', 'active', 'warehouse', 'product', 'inbounds', 'locations')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4338,21 +4341,21 @@ class WarehouseProduct(sgqlc.types.Type):
 
 
 class WarehouseProductConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('WarehouseProductEdge')), graphql_name='edges')
 
 
 class WarehouseProductEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(WarehouseProduct, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class WarehouseProductInbound(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'sku', 'warehouse_id', 'po_id', 'purchase_order_line_item_id', 'po_date', 'quantity', 'quantity_received', 'quantity_rejected', 'sell_ahead', 'status')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4369,21 +4372,21 @@ class WarehouseProductInbound(sgqlc.types.Type):
 
 
 class WarehouseProductInboundConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('WarehouseProductInboundEdge')), graphql_name='edges')
 
 
 class WarehouseProductInboundEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(WarehouseProductInbound, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class WarehouseProductMutationOutput(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'warehouse_product')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4391,7 +4394,7 @@ class WarehouseProductMutationOutput(sgqlc.types.Type):
 
 
 class WarehouseProductsQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4406,7 +4409,7 @@ class WarehouseProductsQueryResult(sgqlc.types.Type):
 
 
 class Webhook(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('id', 'legacy_id', 'account_id', 'shop_name', 'name', 'url', 'source', 'shared_signature_secret')
     id = sgqlc.types.Field(String, graphql_name='id')
     legacy_id = sgqlc.types.Field(Int, graphql_name='legacy_id')
@@ -4419,21 +4422,21 @@ class Webhook(sgqlc.types.Type):
 
 
 class WebhookConnection(sgqlc.types.relay.Connection):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('page_info', 'edges')
     page_info = sgqlc.types.Field(sgqlc.types.non_null(PageInfo), graphql_name='pageInfo')
     edges = sgqlc.types.Field(sgqlc.types.non_null(sgqlc.types.list_of('WebhookEdge')), graphql_name='edges')
 
 
 class WebhookEdge(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('node', 'cursor')
     node = sgqlc.types.Field(Webhook, graphql_name='node')
     cursor = sgqlc.types.Field(sgqlc.types.non_null(String), graphql_name='cursor')
 
 
 class WebhooksQueryResult(sgqlc.types.Type):
-    __schema__ = schema
+    __schema__ = shiphero_schema
     __field_names__ = ('request_id', 'complexity', 'data')
     request_id = sgqlc.types.Field(String, graphql_name='request_id')
     complexity = sgqlc.types.Field(Int, graphql_name='complexity')
@@ -4455,7 +4458,7 @@ class WebhooksQueryResult(sgqlc.types.Type):
 ########################################################################
 # Schema Entry Points
 ########################################################################
-schema.query_type = Query
-schema.mutation_type = Mutation
-schema.subscription_type = None
+shiphero_schema.query_type = Query
+shiphero_schema.mutation_type = Mutation
+shiphero_schema.subscription_type = None
 

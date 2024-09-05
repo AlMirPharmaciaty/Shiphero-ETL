@@ -5,7 +5,7 @@ from sgqlc.operation import Operation
 from sgqlc.endpoint.http import HTTPEndpoint
 
 from config.settings import AUTH_TOKEN
-from config.schema import schema
+from config.shiphero_schema import shiphero_schema
 from utils.datetime_parser import to_iso
 
 FILTER_FROM_DATE = "2024-08-01"
@@ -38,7 +38,7 @@ def extract_orders(from_date, limit=10, after=''):
     GraphQL Data Extractor
     """
     # Build the query
-    op = Operation(schema.Query)
+    op = Operation(shiphero_schema.Query)
     # Building the orders query
     query = op.orders(order_date_from=from_date)
     # Make sure to request the complexity and request_id
