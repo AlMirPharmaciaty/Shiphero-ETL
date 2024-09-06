@@ -1,5 +1,8 @@
-from sqlalchemy import Column, String, DateTime, Float
-from sqlalchemy.sql import func
+from datetime import datetime
+from typing import Optional
+
+from sqlalchemy import JSON, String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from config.database import Base
 
@@ -9,19 +12,22 @@ class Order(Base):
 
     __tablename__ = "orders"
 
-    id = Column(String, primary_key=True)
-    order_number = Column(String)
-    partner_order_id = Column(String)
-    status = Column(String)
-    source = Column(String)
-    shop_name = Column(String)
-    total_price = Column(Float)
-    created_at = Column(DateTime)
-    shipped_at = Column(DateTime)
-    created_by = Column(String)
-    shipped_by = Column(String)
-    fulfillment_time = Column(String)
-    fulfillment_time_secs = Column(Float)
-    extracted_at = Column(DateTime)
-    transformed_at = Column(DateTime)
-    loaded_at = Column(DateTime, default=func.now())
+    id: Mapped[str] = mapped_column(String(255), primary_key=True)
+    legacy_id: Mapped[Optional[int]]
+    order_number: Mapped[Optional[str]] = mapped_column(String(255))
+    shop_name: Mapped[Optional[str]] = mapped_column(String(255))
+    fulfillment_status: Mapped[Optional[str]] = mapped_column(String(255))
+    order_date: Mapped[Optional[datetime]]
+    total_tax: Mapped[Optional[float]]
+    subtotal: Mapped[Optional[float]]
+    total_discounts: Mapped[Optional[float]]
+    total_price: Mapped[Optional[float]]
+    ready_to_ship: Mapped[Optional[bool]]
+    email: Mapped[Optional[str]] = mapped_column(String(255))
+    profile: Mapped[Optional[str]] = mapped_column(String(255))
+    required_ship_date: Mapped[Optional[datetime]]
+    tags = mapped_column(JSON, nullable=True)
+    flagged: Mapped[Optional[bool]]
+    source: Mapped[Optional[str]] = mapped_column(String(255))
+    allow_partial: Mapped[Optional[bool]]
+    updated_at: Mapped[Optional[datetime]]

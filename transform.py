@@ -2,7 +2,7 @@ import time
 import json
 import csv
 
-from utils.datetime_parser import to_iso, from_iso
+from utils.datetime_parser import from_iso
 
 start = time.time()
 print('Transforming orders...')
@@ -30,8 +30,6 @@ for order in orders:
     data['shipped_by'] = None
     data['fulfillment_time'] = None
     data['fulfillment_time_secs'] = None
-    data['extracted_at'] = order['extracted_at']
-    data['transformed_at'] = to_iso()
 
     # Get order creation and shipping details from history
     for history in order['order_history']:

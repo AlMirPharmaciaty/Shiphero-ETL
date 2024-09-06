@@ -1,4 +1,4 @@
-# Shiphero Orders ETL
+# Shiphero ETL
 
  ### How to run the app locally?
 
@@ -17,19 +17,14 @@ pip install -r requirements
 
 3. Add authentication token in the `.env` file
 
-4. Generate schema (optional) (already provided)
+4. Generate schema (optional) (already generated)
 
 5. Extract data (to json) (configure data selection manually from the file)
 ```
-py extract.py --date=2024-08-01
+py extract_orders.py --datefrom=2024-08-01
 ```
 
-6. Transform data (json to csv) (currently the format of the processed data is for demonstration purposes only)
+6. Load data (into database)
 ```
-py transform.py
-```
-
-7. Load data (into sqlite) (the db model is not production-ready)
-```
-py load.py
+py load_orders.py
 ```
