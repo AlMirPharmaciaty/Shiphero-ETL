@@ -65,6 +65,6 @@ def save_to_db(shipments: list):
 
 start = time.time()
 init_db()
-shipments_raw = get_json_file_content("data/shipments.json")
+shipments_raw = get_json_file_content("data/shipments")
 save_to_db(shipments_raw)
 print(f'Time taken: {time.time()-start} sec')

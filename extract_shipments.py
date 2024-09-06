@@ -1,19 +1,14 @@
-import json
 import time
 import argparse
 from sgqlc.operation import Operation
-from sgqlc.endpoint.http import HTTPEndpoint
 
-from config.settings import AUTH_TOKEN
 from config.shiphero_schema import shiphero_schema
+from utils.common import get_grapql_endpoint, save_json_file
 
 FILTER_FROM_DATE = "2024-08-01"
 FILTER_DATE_TO = None
 FILTER_LIMIT = 100
 REQUEST_INTERVAL = 10
-
-start = time.time()
-print('Extracting shipments...')
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--datefrom", help="Order date from filter")
@@ -32,12 +27,9 @@ if args.interval:
     REQUEST_INTERVAL = int(args.interval)
 
 
-graphql = HTTPEndpoint('https://public-api.shiphero.com/graphql',
-                       base_headers={'Authorization': f'Bearer {AUTH_TOKEN}'})
-
-
 def extract_shipments(from_date, date_to=None, limit=10, after=''):
     """Shiphero Data Extractor"""
+    graphql = get_grapql_endpoint()
     op = Operation(shiphero_schema.Query)
     if date_to:
         query = op.shipments(order_date_from=from_date, order_date_to=date_to)
@@ -62,6 +54,10 @@ def extract_shipments(from_date, date_to=None, limit=10, after=''):
     query_data.page_info.has_next_page()
     query_data.page_info.end_cursor()
     return graphql(op)
+
+
+start = time.time()
+print('Extracting shipments...')
 
 
 GO_TO_NEXT_PAGE = True
@@ -102,7 +98,6 @@ print(f'Shipments count: {len(shipments)}     ')
 print(
     f'Total complexity: {TOTAL_COMPLEXITY} ({PAGE_COUNT} requests/{FAILS} fails)')
 
-with open("data/shipments.json", "w", encoding="utf-8") as file:
-    json.dump(shipments, file)
+save_json_file('data/shipments', shipments)
 
 print(f'Extraction completed --- time taken: {(time.time()-start)} sec')

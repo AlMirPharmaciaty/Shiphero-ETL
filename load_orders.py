@@ -24,8 +24,6 @@ def transform_order_history(history: dict):
     """Transform raw order history"""
     if "created_at" in history:
         history['created_at'] = from_iso(history['created_at'])
-    # if not history['username']:
-    #     history['username'] = "-1"
     return history
 
 
@@ -112,6 +110,6 @@ def save_to_db(orders: list):
 
 start = time.time()
 init_db()
-orders_raw = get_json_file_content("data/orders.json")
+orders_raw = get_json_file_content("data/orders")
 save_to_db(orders_raw)
 print(f'Time taken: {time.time()-start} sec')
