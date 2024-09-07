@@ -122,6 +122,9 @@ print(f'Orders count: {len(orders)}     ')
 print(
     f'Total complexity: {TOTAL_COMPLEXITY} ({PAGE_COUNT} requests/{FAILS} fails)')
 
-save_json_file('data/orders', orders)
+if orders:
+    print("Saving to file...")
+    save_json_file('data/orders', orders)
+    print("data saved to file!")
 
 print(f'Extraction completed --- time taken: {(time.time()-start)} sec')

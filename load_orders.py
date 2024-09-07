@@ -102,7 +102,7 @@ def save_to_db(orders: list):
         print('Commiting changes to database...')
         db.commit()
         print('Orders saved!')
-        print(f'New orders: {new_orders} | New histories: {new_histories} | Existing orders: {len(orders)-new_orders} | Existing histories: {total_histories-new_histories}')
+        print(f'New orders: {new_orders} | New histories: {new_histories} | Existing orders: {len(orders)-new_orders} | Existing histories: {total_histories-new_histories}/{total_histories}')
     except Exception as e:
         db.rollback()
         print(f'Error - {str(e)}')
