@@ -5,36 +5,44 @@ from sgqlc.operation import Operation
 from config.shiphero_schema import shiphero_schema
 from utils.common import get_grapql_endpoint, save_json_file
 
-FILTER_FROM_DATE = "2024-08-01"
-FILTER_DATE_TO = None
-FILTER_LIMIT = 10
+FILTERS = {
+    "order_date_from": None,
+    "order_date_to": None,
+    "updated_from": None,
+    "updated_to": None,
+}
+REQUEST_LIMIT = 10
 REQUEST_INTERVAL = 5
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--datefrom", help="Order date from filter")
-parser.add_argument("--dateto", help="Order date to filter")
-parser.add_argument("--limit",
-                    help="Number of orders extracted per request")
+parser.add_argument("--datefrom", help="From date filter")
+parser.add_argument("--dateto", help="To date filter")
+parser.add_argument("--updatedfrom", help="Updated from date filter")
+parser.add_argument("--updatedto", help="Updated to date filter")
+parser.add_argument("--limit", help="Number of orders extracted per request")
 parser.add_argument("--interval", help="Seconds to wait before each request")
 args = parser.parse_args()
 if args.datefrom:
-    FILTER_FROM_DATE = str(args.datefrom)
+    FILTERS['order_date_from'] = str(args.datefrom)
 if args.dateto:
-    FILTER_DATE_TO = str(args.dateto)
+    FILTERS['order_date_to'] = str(args.dateto)
+if args.updatedfrom:
+    FILTERS['updated_from'] = str(args.updatedfrom)
+if args.updatedto:
+    FILTERS['updated_to'] = str(args.updatedto)
 if args.limit:
-    FILTER_LIMIT = int(args.limit)
+    REQUEST_LIMIT = int(args.limit)
 if args.interval:
     REQUEST_INTERVAL = int(args.interval)
 
+FILTERS = {key: value for key, value in FILTERS.items() if value}
 
-def extract_lineitems(from_date, date_to=None, limit=10, after=''):
+
+def extract_lineitems(filters: dict, limit: int = 10, after: str = ''):
     """Shiphero Data Extractor"""
     graphql = get_grapql_endpoint()
     op = Operation(shiphero_schema.Query)
-    if date_to:
-        query = op.orders(order_date_from=from_date, order_date_to=date_to)
-    else:
-        query = op.orders(order_date_from=from_date)
+    query = op.orders(**filters)
     query.complexity()
 
     query_data = query.data(first=limit, after=after)
@@ -69,12 +77,11 @@ line_items = []
 while GO_TO_NEXT_PAGE:
     print(f"Extracting page: {str(PAGE_COUNT+1)}           ", end='\r')
     try:
-        response = extract_lineitems(from_date=FILTER_FROM_DATE,
-                                     date_to=FILTER_DATE_TO,
-                                     limit=FILTER_LIMIT,
+        response = extract_lineitems(filters=FILTERS,
+                                     limit=REQUEST_LIMIT,
                                      after=NEXT_PAGE)
-        # if "errors" in response:
-        #     print(response['errors'][0]['message'])
+        if "errors" in response:
+            print(response['errors'][0]['message'])
         data = response['data']['orders']
         for order in data['data']['edges']:
             for line_item in order['node']['line_items']['edges']:

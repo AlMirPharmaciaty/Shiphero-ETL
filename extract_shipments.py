@@ -5,36 +5,45 @@ from sgqlc.operation import Operation
 from config.shiphero_schema import shiphero_schema
 from utils.common import get_grapql_endpoint, save_json_file
 
-FILTER_FROM_DATE = "2024-08-01"
-FILTER_DATE_TO = None
-FILTER_LIMIT = 100
+FILTERS = {
+    "order_date_from": None,
+    "order_date_to": None,
+    "date_from": None,
+    "date_to": None,
+}
+REQUEST_LIMIT = 100
 REQUEST_INTERVAL = 10
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--datefrom", help="Order date from filter")
-parser.add_argument("--dateto", help="Order date to filter")
+parser.add_argument("--datefrom", help="Date from filter")
+parser.add_argument("--dateto", help="Date to filter")
+parser.add_argument("--orderdatefrom", help="Order date from filter")
+parser.add_argument("--orderdateto", help="Order date to filter")
 parser.add_argument("--limit",
                     help="Number of shipments extracted per request")
 parser.add_argument("--interval", help="Seconds to wait before each request")
 args = parser.parse_args()
 if args.datefrom:
-    FILTER_FROM_DATE = str(args.datefrom)
+    FILTERS['date_from'] = str(args.datefrom)
 if args.dateto:
-    FILTER_DATE_TO = str(args.dateto)
+    FILTERS['date_to'] = str(args.dateto)
+if args.orderdatefrom:
+    FILTERS['order_date_from'] = str(args.orderdatefrom)
+if args.orderdateto:
+    FILTERS['order_date_to'] = str(args.orderdateto)
 if args.limit:
-    FILTER_LIMIT = int(args.limit)
+    REQUEST_LIMIT = int(args.limit)
 if args.interval:
     REQUEST_INTERVAL = int(args.interval)
 
+FILTERS = {key: value for key, value in FILTERS.items() if value}
 
-def extract_shipments(from_date, date_to=None, limit=10, after=''):
+
+def extract_shipments(filters: dict, limit: int = 10, after: str = ''):
     """Shiphero Data Extractor"""
     graphql = get_grapql_endpoint()
     op = Operation(shiphero_schema.Query)
-    if date_to:
-        query = op.shipments(order_date_from=from_date, order_date_to=date_to)
-    else:
-        query = op.shipments(order_date_from=from_date)
+    query = op.shipments(**filters)
     query.complexity()
 
     query_data = query.data(first=limit, after=after)
@@ -64,22 +73,23 @@ GO_TO_NEXT_PAGE = True
 PAGE_COUNT = 0
 NEXT_PAGE = ''
 TOTAL_COMPLEXITY = 0
+TOTAL_COST = 0
 FAILS = 0
 shipments = []
 
 while GO_TO_NEXT_PAGE:
     print(f"Extracting page: {str(PAGE_COUNT+1)}           ", end='\r')
     try:
-        data = extract_shipments(from_date=FILTER_FROM_DATE,
-                                 date_to=FILTER_DATE_TO,
-                                 limit=FILTER_LIMIT,
-                                 after=NEXT_PAGE)
-        # if "errors" in data:
-        #     print(data['errors'][0]['message'])
-        data = data['data']['shipments']
+        response = extract_shipments(filters=FILTERS,
+                                     limit=REQUEST_LIMIT,
+                                     after=NEXT_PAGE)
+        # if "errors" in response:
+        #     print(response['errors'][0]['message'])
+        data = response['data']['shipments']
         for order in data['data']['edges']:
             shipments.append(order['node'])
         TOTAL_COMPLEXITY += data['complexity']
+        TOTAL_COST += response['extensions']['throttling']['cost']
         page_info = data['data']['pageInfo']
         GO_TO_NEXT_PAGE = page_info['hasNextPage']
         NEXT_PAGE = page_info['endCursor']
@@ -96,7 +106,7 @@ while GO_TO_NEXT_PAGE:
 
 print(f'Shipments count: {len(shipments)}     ')
 print(
-    f'Total complexity: {TOTAL_COMPLEXITY} ({PAGE_COUNT} requests/{FAILS} fails)')
+    f'Total complexity/cost: {TOTAL_COMPLEXITY}/{TOTAL_COST} ({PAGE_COUNT} requests/{FAILS} fails)')
 
 
 if shipments:
