@@ -49,6 +49,7 @@ def extract_lineitems(filters: dict, limit: int = 10, after: str = ''):
     select = query_data.edges.node
     select_line_items = select.line_items().edges.node
     select_line_items.id()
+    select_line_items.legacy_id()
     select_line_items.order_id()
     select_line_items.sku()
     select_line_items.quantity()
@@ -95,7 +96,7 @@ while GO_TO_NEXT_PAGE:
     except Exception as e:
         FAILS += 1
         print(
-            f"Failed to extract data | Retrying in {REQUEST_INTERVAL}s | Error: {str(e)}")
+            f"Failed to extract data ({FAILS}) | Retrying in {REQUEST_INTERVAL}s | Error: {str(e)}")
     if GO_TO_NEXT_PAGE:
         for i in range(REQUEST_INTERVAL):
             count = f"{'0' if (REQUEST_INTERVAL-i)<REQUEST_INTERVAL else ''}{REQUEST_INTERVAL - i}"
@@ -108,7 +109,7 @@ print(
 
 if line_items:
     print("Saving to file...")
-    save_json_file('data/line_items', line_items)
+    save_json_file('line_items', line_items)
     print("data saved to file!")
 
 print(f'Extraction completed --- time taken: {(time.time()-start)} sec')

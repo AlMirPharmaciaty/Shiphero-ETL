@@ -12,6 +12,7 @@ class LineItem(Base):
     __tablename__ = "line_items"
 
     id: Mapped[str] = mapped_column(String(255), primary_key=True)
+    legacy_id: Mapped[Optional[int]]
     order_id: Mapped[Optional[str]] = mapped_column(String(255))
     sku: Mapped[Optional[str]] = mapped_column(String(255))
     quantity: Mapped[Optional[int]]

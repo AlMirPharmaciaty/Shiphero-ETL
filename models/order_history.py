@@ -13,6 +13,7 @@ class OrderHistory(Base):
     __tablename__ = "order_history"
 
     id: Mapped[str] = mapped_column(String(255), primary_key=True)
+    legacy_id: Mapped[Optional[int]]
     order_id: Mapped[Optional[str]] = mapped_column(String(255))
     user_id: Mapped[Optional[str]] = mapped_column(String(255))
     account_id: Mapped[Optional[str]] = mapped_column(String(255))

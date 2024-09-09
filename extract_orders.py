@@ -96,6 +96,7 @@ TOTAL_COMPLEXITY = 0
 TOTAL_COST = 0
 FAILS = 0
 orders = []
+order_histories = []
 
 while GO_TO_NEXT_PAGE:
     print(f"Extracting page: {str(PAGE_COUNT+1)}           ", end='\r')
@@ -107,7 +108,11 @@ while GO_TO_NEXT_PAGE:
         #     print(response['errors'][0]['message'])
         data = response['data']['orders']
         for order in data['data']['edges']:
-            orders.append(order['node'])
+            order = order['node']
+            order_histories.extend(order['order_history'])
+            del order['order_history']
+            orders.append(order)
+
         TOTAL_COMPLEXITY += data['complexity']
         TOTAL_COST += response['extensions']['throttling']['cost']
         page_info = data['data']['pageInfo']
@@ -116,8 +121,7 @@ while GO_TO_NEXT_PAGE:
         PAGE_COUNT += 1
     except Exception as e:
         FAILS += 1
-        print(
-            f"Failed to extract data | Retrying in {REQUEST_INTERVAL}s | Error: {str(e)}")
+        print(f"Failed to extract data ({FAILS}) | Retrying in {REQUEST_INTERVAL}s | Error: {str(e)}")
     if GO_TO_NEXT_PAGE:
         # ======================================================
         # Replace the below for loop with time.sleep(REQUEST_INTERVAL) in prod
@@ -128,13 +132,19 @@ while GO_TO_NEXT_PAGE:
             print(f"Page {PAGE_COUNT} extracted. Waiting {count}s", end='\r')
             time.sleep(1)
 
-print(f'Orders count: {len(orders)}     ')
+print(
+    f'Orders count: {len(orders)} | Order history count: {len(order_histories)}')
 print(
     f'Total complexity/cost: {TOTAL_COMPLEXITY}/{TOTAL_COST} ({PAGE_COUNT} requests/{FAILS} fails)')
 
 if orders:
-    print("Saving to file...")
-    save_json_file('data/orders', orders)
-    print("data saved to file!")
+    print("Saving orders to file...")
+    file = save_json_file('orders', orders)
+    print(f"data saved to file: {file}")
+
+if order_histories:
+    print("Saving order histories to file...")
+    file = save_json_file('order_history', order_histories)
+    print(f"data saved to file: {file}")
 
 print(f'Extraction completed --- time taken: {(time.time()-start)} sec')
