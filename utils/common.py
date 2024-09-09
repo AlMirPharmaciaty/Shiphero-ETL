@@ -40,13 +40,13 @@ def save_json_file(folder: str, content: list):
     directory_path = os.path.join('data', folder, year, month, day)
     os.makedirs(directory_path, exist_ok=True)
 
-    max_number = 0
+    last_file = 0
     for filename in os.listdir(directory_path):
         if filename.endswith(".jsonl"):
             number = int(filename.split(".")[0])
-            max_number = max(max_number, number)
+            last_file = max(last_file, number)
 
-    filename = os.path.join(directory_path, f"{max_number + 1}.jsonl")
+    filename = os.path.join(directory_path, f"{last_file + 1}.jsonl")
     with open(filename, "w", encoding="utf-8") as file:
         for entry in content:
             json.dump(entry, file)
