@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from config.database import init_db, session
 from models.order_history import OrderHistory
 from utils.datetime_parser import from_iso
-from utils.common import get_json_file_content, transform_data, db_upsert
+from utils.common import get_json_file_content, transform_data
+from utils.db import db_upsert
 
 
 def transform_order_history(history: dict):
@@ -32,8 +33,10 @@ def save_to_db(order_histories: list):
 
 
 start = time.time()
+print('Connecting to database...')
 init_db()
-order_history_raw = get_json_file_content("data/order_history/2024/9/9/1")
+print('Retrieving raw data...')
+order_history_raw = get_json_file_content("data/order_history/2024/9/9/2")
 print(f"Transforming {len(order_history_raw)} order histories...")
 order_history_transformed = transform_data(order_history_raw,
                                            transform_order_history)

@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from config.database import init_db, session
 from models.shipment import Shipment
 from utils.datetime_parser import from_iso
-from utils.common import get_json_file_content, transform_data, db_upsert
+from utils.common import get_json_file_content, transform_data
+from utils.db import db_upsert
 
 
 def transform_shipment(shipment: dict):
@@ -32,7 +33,9 @@ def save_to_db(shipments: list):
 
 
 start = time.time()
+print('Connecting to database...')
 init_db()
+print('Retrieving raw data...')
 shipments_raw = get_json_file_content("data/shipments")
 print(f"Transforming {len(shipments_raw)} shipments...")
 shipments_transformed = transform_data(shipments_raw, transform_shipment)

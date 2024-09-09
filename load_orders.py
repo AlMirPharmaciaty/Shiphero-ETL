@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from config.database import init_db, session
 from models.order import Order
 from utils.datetime_parser import from_iso
-from utils.common import get_json_file_content, transform_data, db_upsert
+from utils.common import get_json_file_content, transform_data
+from utils.db import db_upsert
 
 
 def transform_order(order: dict):
@@ -36,8 +37,10 @@ def save_to_db(orders: list):
 
 
 start = time.time()
+print('Connecting to database...')
 init_db()
-orders_raw = get_json_file_content("data/orders/2024/9/9/1")
+print('Retrieving raw data...')
+orders_raw = get_json_file_content("data/orders/2024/9/9/2")
 print(f"Transforming {len(orders_raw)} orders...")
 orders_transformed = transform_data(orders_raw, transform_order)
 save_to_db(orders_transformed)

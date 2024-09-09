@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 
 from config.database import init_db, session
 from models.line_item import LineItem
-from utils.common import get_json_file_content, db_upsert
+from utils.common import get_json_file_content
+from utils.db import db_upsert
 
 
 def save_to_db(line_items: list):
@@ -24,7 +25,9 @@ def save_to_db(line_items: list):
 
 
 start = time.time()
+print('Connecting to database...')
 init_db()
+print('Retrieving raw data...')
 line_items_raw = get_json_file_content("data/line_items")
 save_to_db(line_items_raw)
 print(f'Time taken: {time.time()-start} sec')
