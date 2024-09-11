@@ -109,7 +109,7 @@ print(
 
 if line_items:
     print("Saving to file...")
-    save_json_file('line_items', line_items)
-    print("data saved to file!")
+    file = save_json_file('line_items', line_items)
+    print(f"data saved to file: {file}")
 
 print(f'Extraction completed --- time taken: {(time.time()-start)} sec')

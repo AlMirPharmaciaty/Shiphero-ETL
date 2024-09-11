@@ -17,8 +17,8 @@ REQUEST_INTERVAL = 10
 parser = argparse.ArgumentParser()
 parser.add_argument("--datefrom", help="Date from filter")
 parser.add_argument("--dateto", help="Date to filter")
-parser.add_argument("--orderdatefrom", help="Order date from filter")
-parser.add_argument("--orderdateto", help="Order date to filter")
+parser.add_argument("--orderfrom", help="Order date from filter")
+parser.add_argument("--orderto", help="Order date to filter")
 parser.add_argument("--limit",
                     help="Number of shipments extracted per request")
 parser.add_argument("--interval", help="Seconds to wait before each request")
@@ -27,10 +27,10 @@ if args.datefrom:
     FILTERS['date_from'] = str(args.datefrom)
 if args.dateto:
     FILTERS['date_to'] = str(args.dateto)
-if args.orderdatefrom:
-    FILTERS['order_date_from'] = str(args.orderdatefrom)
-if args.orderdateto:
-    FILTERS['order_date_to'] = str(args.orderdateto)
+if args.orderfrom:
+    FILTERS['order_date_from'] = str(args.orderfrom)
+if args.orderto:
+    FILTERS['order_date_to'] = str(args.orderto)
 if args.limit:
     REQUEST_LIMIT = int(args.limit)
 if args.interval:

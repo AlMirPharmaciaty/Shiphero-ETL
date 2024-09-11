@@ -36,7 +36,7 @@ start = time.time()
 print('Connecting to database...')
 init_db()
 print('Retrieving raw data...')
-order_history_raw = get_json_file_content("data/order_history/2024/9/9/3")
+order_history_raw = get_json_file_content("data/order_history/2024/9/11/1")
 print(f"Transforming {len(order_history_raw)} order histories...")
 order_history_transformed = transform_data(order_history_raw,
                                            transform_order_history)
